@@ -127,7 +127,21 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               Chứng minh năng lực quản trị rủi ro để nhận đặc quyền hạn mức giao dịch lớn và giữ lại tới 80% lợi nhuận trong môi trường chuyên nghiệp nhất.
             </p>
 
-            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+            <div className="bg-brand-surface border border-brand-mint/30 p-4 rounded-md flex items-start space-x-3 max-w-xl shadow-[0_0_15px_rgba(0,225,161,0.05)]">
+              <Zap className="w-5 h-5 text-brand-mint flex-shrink-0 mt-0.5" />
+              <div className="space-y-1 font-sans text-left">
+                <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                  Lịch Trình Bootcamp 2026
+                </div>
+                <p className="text-brand-gray-light text-xs leading-relaxed">
+                  📅 <strong>Khai mạc & Bắt đầu chính thức Vòng 1:</strong> Ngày 20/07/2026.
+                  <br />
+                  🔥 <strong>CTA Đăng ký sớm:</strong> Hoàn tất đăng ký ngay hôm nay để bắt đầu nhận các tài liệu training thực chiến độc quyền trước thềm giải đấu!
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-col sm:flex-row gap-4">
               <button
                 onClick={handleScrollToOpenAccount}
                 className="px-6 py-4 bg-brand-mint text-brand-bg font-display font-black text-xs sm:text-sm tracking-wider rounded-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,225,161,0.4)] hover:bg-white transform hover:-translate-y-0.5 text-center uppercase"
@@ -947,6 +961,11 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             <p className="text-brand-gray text-xs font-sans">
               Bắt đầu hành trình Pro Trader kỷ luật ngay hôm nay
             </p>
+            <div className="bg-brand-mint/5 border border-brand-mint/20 p-2.5 rounded text-center text-[10px] text-brand-mint font-sans leading-relaxed mt-2">
+              🚀 <strong>KICK-OFF VÒNG 1: 20/07/2026</strong>
+              <br />
+              Đăng ký sớm hôm nay để bắt đầu nhận ngay các tài liệu training thực chiến!
+            </div>
           </div>
 
           {isSubmitted ? (
