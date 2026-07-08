@@ -12,18 +12,12 @@ interface HeaderProps {
 export default function Header({ activeTab, setActiveTab, onJoinChallenge, brand }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const showCrm = localStorage.getItem('pro_trader_show_crm') === 'true';
-
   const navItems = [
     { id: 'home', label: 'TRANG CHỦ', icon: Layers },
     { id: 'dashboard', label: 'BẢNG ĐIỀU KHIỂN', icon: Terminal },
     { id: 'leaderboard', label: 'BẢNG XẾP HẠNG', icon: Award },
     { id: 'rules', label: 'THỂ LỆ & HỎI ĐÁP', icon: BookOpen },
   ];
-
-  if (showCrm) {
-    navItems.push({ id: 'leads', label: 'QUẢN LÝ LEADS', icon: Users });
-  }
 
   return (
     <header className="sticky top-0 z-50 bg-brand-bg/90 backdrop-blur-md border-b border-brand-surface-bright/50">

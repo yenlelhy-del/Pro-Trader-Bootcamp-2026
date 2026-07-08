@@ -8,6 +8,7 @@ export interface BrandConfig {
   discordLink: string;
   communityText: string;
   excelSuccessText: string;
+  webhookUrl: string;
 }
 
 export const BRANDS: Record<'lion' | 'tiger', BrandConfig> = {
@@ -21,6 +22,7 @@ export const BRANDS: Record<'lion' | 'tiger', BrandConfig> = {
     discordLink: 'https://discord.gg/vAB8rCSYZa',
     communityText: 'CỘNG ĐỒNG: LION FINPEACE DISCORD',
     excelSuccessText: 'Link tải file Excel Quản trị rủi ro & Nhật ký giao dịch đã được hệ thống tự động chuẩn bị để gửi tới Zalo của bạn.',
+    webhookUrl: 'https://script.google.com/macros/s/AKfycbwFTuZBCLk6FyM8jQtWd3PVL8XFzD5yvUDyd4oKf1LZm45hzhZlWwg1tzmk1FRXl5W5Pw/exec',
   },
   tiger: {
     id: 'tiger',
@@ -32,6 +34,7 @@ export const BRANDS: Record<'lion' | 'tiger', BrandConfig> = {
     discordLink: 'https://discord.gg/SKft9ac8fS',
     communityText: 'CỘNG ĐỒNG: TIGER INVEST DISCORD',
     excelSuccessText: 'Link tải file Excel Quản trị rủi ro & Nhật ký giao dịch đã được hệ thống gửi tới số Zalo đăng ký.',
+    webhookUrl: 'https://script.google.com/macros/s/AKfy_YOUR_TIGER_WEBHOOK_URL_HERE/exec',
   }
 };
 

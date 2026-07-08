@@ -5,7 +5,6 @@ import HomeSection from './components/HomeSection';
 import DashboardSection from './components/DashboardSection';
 import LeaderboardSection from './components/LeaderboardSection';
 import RulesSection from './components/RulesSection';
-import LeadsSection from './components/LeadsSection';
 import { User, CheckCircle } from 'lucide-react';
 import { getActiveBrand } from './brandConfig';
 
@@ -22,64 +21,36 @@ export default function App() {
     document.body.className = brand.themeClass;
   }, [brand]);
 
-  // Check URL parameters for secret admin mode access
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('admin') === 'true' || params.get('sale') === 'true') {
-      localStorage.setItem('pro_trader_show_crm', 'true');
-      // Clean up URL query parameters instantly to keep the URL neat
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, [brand]);
-
   const handleRegisterSuccess = (name: string, phone: string, brokerCode: string) => {
     setRegisteredUser({ name, phone, brokerCode });
     setShowToast(true);
 
-    // Save lead data locally
+    // Save lead data locally and trigger sheet webhook if active
     try {
-      const storedLeads = localStorage.getItem('pro_trader_leads');
-      const leads = storedLeads ? JSON.parse(storedLeads) : [];
-      
       // Determine Broker Name based on Broker Code
       let brokerName = 'Khác';
       if (brokerCode === '0011000306') brokerName = 'Trịnh Thị Anh Thư';
       else if (brokerCode === '0011000776') brokerName = 'Lê Vũ Tú Trinh';
       else if (brokerCode === '0011000297') brokerName = 'Nguyễn Minh Quang';
 
-      const newLead = {
-        id: "lead_" + Date.now(),
+      const payload = {
         name,
         phone,
-        brokerCode,
         brokerName,
+        brokerId: brokerCode || 'Khác',
         timestamp: new Date().toLocaleString('vi-VN'),
-        status: 'new' as const,
-        notes: 'Lead đăng ký mới từ trang chủ.',
         campaign: brand.id
       };
 
-      const updatedLeads = [newLead, ...leads];
-      localStorage.setItem('pro_trader_leads', JSON.stringify(updatedLeads));
-
-      // Get brand-specific or global webhook URL, fallback to hardcoded default
-      const DEFAULT_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwFTuZBCLk6FyM8jQtWd3PVL8XFzD5yvUDyd4oKf1LZm45hzhZlWwg1tzmk1FRXl5W5Pw/exec';
-      const webhookUrl = localStorage.getItem(`pro_trader_webhook_url_${brand.id}`) || 
-                         localStorage.getItem('pro_trader_webhook_url') || 
-                         DEFAULT_WEBHOOK_URL;
-
-      if (webhookUrl) {
-        fetch(webhookUrl, {
+      // Post to hardcoded brand webhook directly (skipping local storage)
+      if (brand.webhookUrl && !brand.webhookUrl.includes('YOUR_TIGER_WEBHOOK')) {
+        fetch(brand.webhookUrl, {
           method: 'POST',
           mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            action: 'NEW',
-            ...newLead,
-            brokerId: brokerCode || 'Khác'
-          }),
+          body: JSON.stringify(payload),
         })
           .then(() => console.log('Lead sent to Google Sheets successfully'))
           .catch(err => console.error('Error sending lead to Google Sheets:', err));
@@ -120,8 +91,6 @@ export default function App() {
         return <LeaderboardSection brand={brand} />;
       case 'rules':
         return <RulesSection brand={brand} />;
-      case 'leads':
-        return <LeadsSection brand={brand} />;
       default:
         return (
           <HomeSection
