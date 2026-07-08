@@ -16,7 +16,7 @@ interface HomeSectionProps {
 
 export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: HomeSectionProps) {
   // Calculator state
-  const [capital, setCapital] = useState<number>(50000000); // 50 million VND default
+  const [capital, setCapital] = useState<number>(10000000); // 10 million VND default
 
   // Registration Form state
   const [fullName, setFullName] = useState('');
@@ -851,55 +851,19 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
       </section>
 
 
-      {/* 5. INTERACTIVE SLIDER RISK CALCULATOR */}
+      {/* 5. RISK CALCULATOR (VÒNG 2 STATIC DASHBOARD) */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
         <div className="text-center space-y-3">
           <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase">
-            MÁY TÍNH HẠN MỨC GIAO DỊCH & RỦI RO
+            THÔNG SỐ QUẢN TRỊ RỦI RO & HẠN MỨC GIAO DỊCH (VÒNG 2)
           </h2>
           <p className="text-brand-gray text-xs sm:text-sm font-sans max-w-2xl mx-auto">
-            Kéo thanh trượt để điều chỉnh số vốn tham gia thử thách ban đầu của bạn và xem các thông số tính toán rủi ro kỷ luật cũng như hạn mức ưu đãi nhận được:
+            Bảng thông số chi tiết biểu diễn quy tắc bảo vệ vốn và hạn mức giao dịch thực chiến chính thức áp dụng cho học viên tại Vòng 2:
           </p>
         </div>
 
-        <div className="bg-brand-container border border-brand-surface-bright rounded-lg p-6 sm:p-8 space-y-8">
-
-          {/* Slider input */}
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <label className="font-display font-bold text-xs uppercase text-brand-gray tracking-wider">
-                CHỌN VỐN TỰ CÓ ĐỂ NHẬN CẤP VỐN (VÒNG 2):
-              </label>
-              <div className="font-mono text-2xl sm:text-3xl font-black text-brand-mint flex items-baseline">
-                <span>{formatNumberWithDots(capital / 1000000)}</span>
-                <span className="text-xs sm:text-sm text-brand-gray ml-1">triệu VND</span>
-              </div>
-            </div>
-
-            <div className="relative pt-2">
-              <input
-                type="range"
-                min={10000000}
-                max={500000000}
-                step={10000000}
-                value={capital}
-                onChange={(e) => setCapital(Number(e.target.value))}
-                className="w-full h-2 bg-brand-surface-bright rounded-lg appearance-none cursor-pointer accent-brand-mint focus:outline-none"
-                style={{
-                  background: `linear-gradient(to right, ${brand.id === 'tiger' ? '#ffd02c' : '#00e1a1'} 0%, ${brand.id === 'tiger' ? '#ffd02c' : '#00e1a1'} ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 100%)`
-                }}
-              />
-              <div className="flex justify-between text-[10px] text-brand-gray font-mono mt-2">
-                <span>10 TRIỆU</span>
-                <span>100 TRIỆU</span>
-                <span>200 TRIỆU</span>
-                <span>300 TRIỆU</span>
-                <span>400 TRIỆU</span>
-                <span>500 TRIỆU</span>
-              </div>
-            </div>
-          </div>
+        <div className="bg-brand-container border border-brand-surface-bright rounded-lg p-6 sm:p-8">
 
           {/* Calculator Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -909,58 +873,62 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
               <div className="space-y-4">
                 <div className="flex items-center space-x-2 text-brand-mint font-display font-bold text-sm uppercase tracking-wide border-b border-brand-surface-bright/40 pb-3">
                   <Activity className="w-5 h-5" />
-                  <span>* Công thức vận hành:</span>
+                  <span>* Cơ chế vận hành Vòng 2:</span>
                 </div>
                 <ul className="space-y-4 text-xs sm:text-sm text-brand-gray-light font-sans leading-relaxed">
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">8% NAV</strong>.</span>
+                    <span>Vốn tự có tham gia thử thách Vòng 2 ấn định cố định ở mức <strong className="text-white font-medium">10 triệu VND</strong>.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Hạn mức giao dịch ưu đãi tại Chặng 2 gấp <strong className="text-white font-medium">10 lần</strong> số vốn nạp thực tế ban đầu.</span>
+                    <span>Hạn mức giao dịch (Vốn ủy thác) được cấp bổ sung gấp <strong className="text-white font-medium">10 lần</strong> số vốn nạp, lên tới <strong className="text-brand-mint font-medium">100 triệu VND</strong>.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Tỷ lệ chia sẻ lợi nhuận tại Chặng 2 lên đến <strong className="text-white font-medium">80%</strong> cho học viên xuất sắc.</span>
+                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">8% NAV</strong> (tương đương <strong className="text-brand-red font-medium">800.000 đ</strong>).</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-brand-mint mr-2">•</span>
+                    <span>Chia thưởng tới <strong className="text-white font-medium">80% lợi nhuận</strong> cho Top 10 Best Performance, review định kỳ 2 tháng một lần.</span>
                   </li>
                 </ul>
               </div>
 
               <div className="mt-6 pt-4 border-t border-brand-surface-bright/30 flex items-center space-x-2 text-[11px] text-brand-gray font-sans italic">
                 <Info className="w-4 h-4 text-brand-mint" />
-                <span>Số vốn ban đầu càng lớn, hạn mức cấp bổ sung và bộ đệm rủi ro càng mở rộng.</span>
+                <span>Mọi quy tắc rủi ro của Vòng 2 được cài đặt và quản trị tự động trên tài khoản chứng khoán của bạn.</span>
               </div>
             </div>
 
             {/* Right Info: Live Calculated Stats */}
             <div className="lg:col-span-7 bg-brand-surface border border-brand-surface-bright p-6 rounded-lg space-y-6">
               <div className="font-display font-bold text-sm uppercase text-brand-gray-light tracking-wide border-b border-brand-surface-bright/50 pb-3">
-                Thông Số Tính Toán
+                Bảng Thông Số Quản Trị Vòng 2
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                 {/* Stat 1 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
-                    Giới hạn sụt giảm tối đa (8%):
+                    Vốn tự có tham gia Vòng 2:
                   </span>
-                  <div className="text-lg sm:text-xl font-mono font-black text-brand-red mt-1.5">
-                    {formatNumberWithDots(Math.floor(capital * 0.08))} đ
+                  <div className="text-lg sm:text-xl font-mono font-black text-white mt-1.5">
+                    10.000.000 đ
                   </div>
                   <span className="text-[10px] text-brand-gray mt-1 block">
-                    Bộ đệm rủi ro an toàn tuyệt đối
+                    Số vốn nạp thực tế ban đầu
                   </span>
                 </div>
 
                 {/* Stat 2 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
-                    Hạn mức siêu ưu đãi (Vòng 2 - x10):
+                    Hạn mức giao dịch (Vòng 2 - x10):
                   </span>
                   <div className="text-lg sm:text-xl font-mono font-black text-brand-mint mt-1.5">
-                    {formatNumberWithDots(capital * 10)} đ
+                    100.000.000 đ
                   </div>
                   <span className="text-[10px] text-brand-gray mt-1 block">
                     Vốn ủy thác cấp bổ sung từ học viện
@@ -970,9 +938,22 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 {/* Stat 3 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
+                    Giới hạn sụt giảm tối đa (8%):
+                  </span>
+                  <div className="text-lg sm:text-xl font-mono font-black text-brand-red mt-1.5">
+                    800.000 đ
+                  </div>
+                  <span className="text-[10px] text-brand-gray mt-1 block">
+                    Bộ đệm rủi ro an toàn tuyệt đối
+                  </span>
+                </div>
+
+                {/* Stat 4 */}
+                <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
+                  <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
                     Cơ chế chia sẻ lợi nhuận:
                   </span>
-                  <div className="text-lg sm:text-xl font-mono font-black text-white mt-1.5">
+                  <div className="text-lg sm:text-xl font-mono font-black text-brand-gold mt-1.5">
                     80% / 20%
                   </div>
                   <span className="text-[10px] text-brand-mint font-display font-medium mt-1 block text-left">
