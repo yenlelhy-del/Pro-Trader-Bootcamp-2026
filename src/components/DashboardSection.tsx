@@ -8,15 +8,15 @@ import { BrandConfig } from '../brandConfig';
 const COMPLIANT_TICKERS = ['FPT', 'TCB', 'HPG', 'VNM', 'MWG', 'SSI', 'VND', 'MSN', 'VHM', 'VIC', 'ACB', 'MBB', 'VPB', 'STB', 'GAS', 'CTG', 'HDB', 'VRE', 'TPB'];
 
 export default function DashboardSection({ brand }: { brand: BrandConfig }) {
-  const [initialCapital, setInitialCapital] = useState<number>(50000000); // 50,000,000 VND default
+  const [initialCapital, setInitialCapital] = useState<number>(30000000); // 30,000,000 VND (Vòng 1) default
   const [tradeLogs, setTradeLogs] = useState<TradeLog[]>(INITIAL_TRADE_LOGS);
   
-  // Form input state
+  // Form inputs state
   const [ticker, setTicker] = useState('');
   const [action, setAction] = useState<'BUY' | 'SELL'>('BUY');
   const [quantity, setQuantity] = useState<number>(100);
-  const [entryPrice, setEntryPrice] = useState<number>(50000);
-  const [exitPrice, setExitPrice] = useState<number>(53000);
+  const [entryPrice, setEntryPrice] = useState<number>(50.0);
+  const [exitPrice, setExitPrice] = useState<number>(53.0);
   const [weight, setWeight] = useState<number>(20); // default 20% NAV allocation
   const [comment, setComment] = useState('');
 
@@ -129,7 +129,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
 
     // Calculate profit
     const multiplier = action === 'BUY' ? 1 : -1;
-    const profit = quantity * (exitPrice - entryPrice) * multiplier;
+    const profit = quantity * (exitPrice - entryPrice) * 1000 * multiplier;
 
     const newTrade: TradeLog = {
       id: 't_' + Date.now(),
@@ -250,13 +250,13 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
       <div className="bg-brand-container border border-brand-surface-bright p-5 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         <div>
           <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-widest font-display">
-            Chọn vốn tham gia thử thách (NAV Vòng 1):
+            Hạn mức NAV (Chọn Vòng 1 hoặc Vòng 2):
           </label>
-          <span className="text-[11px] text-brand-gray block mt-1 font-sans">Vốn khởi tạo để tính rào cản sụt giảm rủi ro</span>
+          <span className="text-[11px] text-brand-gray block mt-1 font-sans">Chọn hạn mức của Vòng 1 hoặc Vòng 2 để chạy mô phỏng</span>
         </div>
 
         <div className="md:col-span-2 flex flex-wrap gap-3">
-          {[30000000, 50000000, 100000000, 200000000, 500000000].map((cap) => (
+          {[10000000, 30000000].map((cap) => (
             <button
               key={cap}
               onClick={() => setInitialCapital(cap)}
@@ -266,7 +266,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                   : 'bg-brand-surface border-brand-surface-bright text-brand-gray-light hover:text-white hover:border-brand-gray'
               }`}
             >
-              {cap / 1000000}M VND
+              {cap === 10000000 ? '10M VND (Vòng 2)' : '30M VND (Vòng 1)'}
             </button>
           ))}
         </div>
@@ -665,28 +665,30 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
-                  Giá Mua Vào (đ) *
+                  Giá Mua Vào (x1.000 đ) *
                 </label>
                 <input
                   type="number"
                   required
-                  min={100}
+                  step="any"
+                  min={0.1}
                   value={entryPrice}
-                  onChange={(e) => setEntryPrice(Math.max(1, Number(e.target.value)))}
+                  onChange={(e) => setEntryPrice(Math.max(0.1, Number(e.target.value)))}
                   className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
                 />
               </div>
 
               <div>
                 <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
-                  Giá Bán Ra (đ) *
+                  Giá Bán Ra (x1.000 đ) *
                 </label>
                 <input
                   type="number"
                   required
-                  min={100}
+                  step="any"
+                  min={0.1}
                   value={exitPrice}
-                  onChange={(e) => setExitPrice(Math.max(1, Number(e.target.value)))}
+                  onChange={(e) => setExitPrice(Math.max(0.1, Number(e.target.value)))}
                   className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
                 />
               </div>
@@ -762,9 +764,9 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                         </span>
                       </td>
                       <td className="py-3 text-right font-mono font-medium">{trade.quantity.toLocaleString('vi-VN')}</td>
-                      <td className="py-3 text-right font-mono text-brand-gray-light">{trade.price.toLocaleString('vi-VN')}</td>
+                      <td className="py-3 text-right font-mono text-brand-gray-light">{trade.price.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })}</td>
                       <td className="py-3 text-right font-mono text-brand-gray-light">
-                        {trade.price === 0 ? '-' : (trade.price + (trade.profit / trade.quantity) * (trade.action === 'BUY' ? 1 : -1)).toLocaleString('vi-VN')}
+                        {trade.price === 0 ? '-' : (trade.price + (trade.profit / (trade.quantity * 1000)) * (trade.action === 'BUY' ? 1 : -1)).toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })}
                       </td>
                       <td className={`py-3 text-right font-mono font-bold ${trade.profit >= 0 ? 'text-brand-mint' : 'text-brand-red'}`}>
                         {trade.profit >= 0 ? '+' : ''}
