@@ -198,7 +198,7 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: "faq6",
     question: "Cơ chế chia sẻ lợi nhuận 80% hoạt động ra sao?",
-    answer: "Ở Vòng 2 (Tăng trưởng chuyên nghiệp), bạn được cấp hạn mức giao dịch gấp 10 lần vốn tự có. Toàn bộ lợi nhuận phát sinh từ hạn mức giao dịch này sẽ được chia sẻ theo tỷ lệ: Bạn nhận 80%, ban tổ chức Bootcamp giữ 20% làm quỹ vận hành. Lợi nhuận được đối soát và giải ngân định kỳ 2 tháng một lần.",
+    answer: "Ở Vòng 2 (Tăng trưởng chuyên nghiệp), bạn được cấp hạn mức giao dịch gấp 10 lần vốn tự có. Lợi nhuận phát sinh từ hạn mức giao dịch này sẽ được chia sẻ theo tỷ lệ: Bạn nhận 80% lợi nhuận (áp dụng giới hạn chia thưởng cho Top 10 Performance tốt nhất), 20% còn lại giữ làm quỹ vận hành. Lợi nhuận được đối soát và giải ngân dựa trên kết quả review định kỳ 2 tháng một lần.",
     category: "thể_lệ"
   },
   {

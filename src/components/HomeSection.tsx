@@ -703,7 +703,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">Chia thưởng</span>
                 <span className="text-base sm:text-lg font-black text-brand-gold">80% Lợi nhuận</span>
-                <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Khấu trừ định kỳ 2 tháng một lần</span>
+                <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Dành cho Top 10 performance, review 2 tháng/lần</span>
               </div>
             </div>
 
@@ -939,7 +939,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 Thông Số Tính Toán
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                 {/* Stat 1 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
@@ -970,26 +970,13 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 {/* Stat 3 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
-                    Hạn mức đặc quyền Pro (Vòng 3):
-                  </span>
-                  <div className="text-lg sm:text-xl font-mono font-black text-brand-gold mt-1.5">
-                    {formatNumberWithDots(capital * 4)} đ
-                  </div>
-                  <span className="text-[10px] text-brand-gray mt-1 block">
-                    Hạn mức tối đa được nâng cấp tiếp
-                  </span>
-                </div>
-
-                {/* Stat 4 */}
-                <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
-                  <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
                     Cơ chế chia sẻ lợi nhuận:
                   </span>
                   <div className="text-lg sm:text-xl font-mono font-black text-white mt-1.5">
                     80% / 20%
                   </div>
-                  <span className="text-[10px] text-brand-mint font-display font-medium mt-1 block">
-                    Bạn nhận về 80% lợi nhuận
+                  <span className="text-[10px] text-brand-mint font-display font-medium mt-1 block text-left">
+                    Dành cho Top 10 performance, review 2 tháng/lần
                   </span>
                 </div>
 
