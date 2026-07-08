@@ -1,0 +1,35 @@
+XỬ LÝ CÁC LỜI TỪ CHỐI PHỔ BIẾN (OBJECTION HANDLING)
+
+1. Từ chối 1: "Thị trường đang xấu/downtrend quá, không mua bán gì được đâu!"
+- Giải pháp cho Sales:
+"Dạ vâng, thị trường giai đoạn này quả thực là thử thách lớn với số đông. Nhưng thực tế, thị trường khó mới là lúc để mình kiểm nghiệm lại phương pháp giao dịch và rèn kỷ luật cắt lỗ ngắn. Quy tắc thăng hạng của Bootcamp chỉ yêu cầu đạt lợi nhuận tối thiểu 5% trong vòng 2 tháng (tức là chỉ khoảng 2.5%/tháng) – mức này hoàn toàn khả thi nếu mình chọn lọc kỹ rổ VN100.
+
+Đặc biệt, khi anh rèn được kỷ luật ở giai đoạn này và vượt qua Vòng 1, anh sẽ được cấp vốn x10 (ví dụ nạp 10M được cấp 100M). Đến lúc thị trường tạo đáy xong và bước vào sóng hồi (uptrend), anh đã có sẵn nguồn vốn lớn của quỹ để giải ngân đón sóng mà không cần bỏ thêm tiền túi. Đi trước một bước lúc thị trường khó là lợi thế rất lớn của các Trader chuyên nghiệp đấy anh."
+
+2. Từ chối 2: "Mức nạp 10 triệu là để làm gì? Tôi có bị mất số tiền này không?"
+- Giải pháp cho Sales:
+"Dạ em xin khẳng định là số tiền 10 triệu VND này nạp vào tài khoản chứng khoán cá nhân chính chủ đứng tên anh/chị tại CTCK đối tác ([KIS đối với Tiger / KBSV đối với Lion]), chứ hoàn toàn không chuyển cho Ban tổ chức hay bên thứ ba nào cả. Anh/chị giữ toàn quyền sở hữu, nạp rút tiền trực tiếp về tài khoản ngân hàng trùng tên của mình.
+
+Mức 10 triệu là điều kiện cần tối thiểu để đảm bảo:
+- Anh/chị có đủ quy mô vốn phân bổ cho các cổ phiếu rổ VN100 (thường có thị giá trung bình 20k - 100k/cổ phiếu) nhằm tuân thủ quy tắc đa dạng hóa (không mua quá 40% NAV cho 1 mã) và mua đủ lô tối thiểu 100 cổ phiếu theo quy định của sàn HSX.
+- Thể hiện sự nghiêm túc và cam kết kỷ luật thực chiến của người tham gia.
+
+Luật sụt giảm tổng của chương trình là 8% (tức là tối đa anh/chị lỗ 800k VND trên số vốn 10 triệu thì tài khoản sẽ dừng thử thách). Ngay khi dừng vị thế, anh/chị hoàn toàn có thể rút 9.2 triệu VND còn lại về tài khoản ngân hàng bất cứ lúc nào anh/chị muốn."
+
+3. Từ chối 3: "Ủy quyền quản trị rủi ro cho bên em thì tiền của tôi có an toàn không? Bên em có tự ý mua bán hay rút tiền được không?"
+- Giải pháp cho Sales:
+"Dạ anh/chị hoàn toàn yên tâm ạ. Tài khoản chứng khoán đăng ký bằng thông tin cá nhân của anh/chị. Hệ thống chuyển/rút tiền chỉ được thực hiện đến tài khoản ngân hàng chính chủ trùng tên với tài khoản chứng khoán của anh/chị. Ban tổ chức hay bất kỳ ai khác tuyệt đối không thể tự ý đặt lệnh hay rút tiền của anh/chị.
+
+Ban tổ chức chỉ kết nối xem chỉ số tài khoản (số dư NAV, tỷ lệ sụt giảm ròng) thông qua hệ thống quản lý để phục vụ việc tính toán điểm thăng hạng và đưa ra cảnh báo tự động khóa tài khoản (ngắt vị thế) khi chạm ngưỡng sụt giảm rủi ro cho phép nhằm bảo vệ vốn cho anh/chị."
+
+4. Từ chối 4: "Tại sao tôi không được mua các mã Penny đang tăng trần mà bắt buộc phải giao dịch rổ VN100?"
+- Giải pháp cho Sales:
+"Dạ em hiểu các mã Penny thường có sóng tăng trần rất hấp dẫn. Tuy nhiên, rủi ro đi kèm của nhóm này là tính thao túng giá cao và cực kỳ dễ mất thanh khoản (khi thị trường đảo chiều sẽ bị 'nhốt sàn' không thể bán cắt lỗ được).
+
+Mục tiêu của Bootcamp là đào tạo và tìm kiếm những Nhà giao dịch chuyên nghiệp có khả năng quản trị rủi ro bền vững cho nguồn vốn lớn của Quỹ. Rổ VN100 là danh sách 100 cổ phiếu đầu ngành có vốn hóa lớn và thanh khoản an toàn nhất thị trường Việt Nam. Giao dịch trong nhóm này sẽ đảm bảo tính minh bạch, khớp lệnh nhanh chóng và bảo vệ tài khoản của anh/chị khỏi các cú sụp đổ bất ngờ của nhóm cổ phiếu đầu cơ rác."
+
+5. Từ chối 5: "Lên Vòng 2 giao dịch bằng vốn của Quỹ, nếu tôi làm thua lỗ thì tôi có phải đền tiền không? Có ràng buộc gì pháp lý không?"
+- Giải pháp cho Sales:
+"Dạ hoàn toàn không anh/chị nhé. Ở Vòng 2, anh/chị là Trader quản lý nguồn vốn được cấp từ Quỹ của Ban tổ chức.
+- Nếu giao dịch phát sinh lợi nhuận, anh/chị được nhận 80% số lãi đó (áp dụng cho Top 10 performance tốt nhất, review 2 tháng/lần).
+- Nếu giao dịch xảy ra thua lỗ vượt quá giới hạn an toàn của Quỹ, tài khoản sẽ tự động khóa lại và Ban tổ chức sẽ gánh chịu 100% khoản lỗ này. Anh/chị hoàn toàn không phải đền bù hay gánh bất kỳ một khoản nợ nào cả. Điều này sẽ được quy định bằng văn bản ký kết hợp tác rõ ràng giữa hai bên trước khi giao tài khoản Quỹ."
