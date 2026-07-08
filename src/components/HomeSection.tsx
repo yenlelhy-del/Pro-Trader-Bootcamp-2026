@@ -242,12 +242,24 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
     e.preventDefault();
     if (!toolPhone) return;
     setToolSubmitted(true);
-    setTimeout(() => {
-      setShowToolModal(false);
-      setToolSubmitted(false);
-      setToolPhone('');
-      alert('Hệ thống đã ghi nhận yêu cầu. Link tải File Excel Quản trị rủi ro đã được gửi qua Zalo số: ' + toolPhone);
-    }, 1500);
+    
+    // 1. Tải file excel về máy trực tiếp
+    downloadExcelTemplate();
+
+    // 2. Gửi thông tin lead lên Google Sheets qua webhook Apps Script
+    fetch('https://script.google.com/macros/s/AKfycbwFTuZBCLk6FyM8jQtWd3PVL8XFzD5yvUDyd4oKf1LZm45hzhZlWwg1tzmk1FRXl5W5Pw/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Khách tải File Excel',
+        phone: toolPhone,
+        brokerName: 'Tải File Hệ Thống',
+        brokerCode: 'SYSTEM'
+      })
+    });
   };
 
   const handleScrollToRegister = () => {
@@ -1319,92 +1331,130 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       {showToolModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={() => setShowToolModal(false)} />
-          <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-lg w-full relative z-10 space-y-6">
+          <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-md w-full relative z-10 space-y-6">
 
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
-                <Download className="w-6 h-6" />
-              </div>
-              <h3 className="font-display font-black text-lg text-white uppercase">
-                Tải File Excel Nhật Ký & Quản Trị
-              </h3>
-              <p className="text-brand-gray text-xs font-sans max-w-sm mx-auto leading-relaxed">
-                Tải xuống tệp Excel tiêu chuẩn được thiết lập sẵn bộ giám sát 5 luật kỷ luật và nhật ký vị thế của giải đấu Bootcamp 2026.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {/* Option 1: Direct Download */}
-              <button
-                onClick={() => {
-                  downloadExcelTemplate();
-                }}
-                className="w-full p-4 bg-brand-mint-bg/20 hover:bg-brand-mint/20 border border-brand-mint/30 hover:border-brand-mint rounded-lg flex items-center justify-between transition-all group"
-              >
-                <div className="text-left space-y-1">
-                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
-                    Cách 1: Tải trực tiếp File Excel
+            {!toolSubmitted ? (
+              // STEP 1: Form to collect phone number
+              <>
+                <div className="text-center space-y-2">
+                  <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
+                    <Download className="w-6 h-6" />
                   </div>
-                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
-                    Tải ngay tệp Excel (.xls) có công thức và dữ liệu mẫu chuẩn.
+                  <h3 className="font-display font-black text-lg text-white uppercase">
+                    Tải File Excel Quản Trị Rủi Ro
+                  </h3>
+                  <p className="text-brand-gray text-xs font-sans">
+                    Vui lòng nhập số điện thoại Zalo của bạn để hệ thống ghi nhận và tự động tải file Excel đặc quyền về máy.
                   </p>
                 </div>
-                <div className="bg-brand-mint text-brand-bg p-2 rounded-full group-hover:scale-110 transition-transform">
-                  <Download className="w-4 h-4" />
-                </div>
-              </button>
 
-              {/* Option 2: Discord Community Link */}
-              <a
-                href="https://discord.gg/5nMrdAWxE"
-                target="_blank"
-                rel="noreferrer"
-                className="block w-full p-4 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright hover:border-brand-mint/30 rounded-lg flex items-center justify-between transition-all group"
-              >
-                <div className="text-left space-y-1">
-                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
-                    Cách 2: Nhận tại Discord Lion Invest
+                <form onSubmit={handleToolRequestSubmit} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-wider font-display">
+                      Số điện thoại Zalo của bạn:
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="e.g. 0901 234 567"
+                      value={toolPhone}
+                      onChange={(e) => setToolPhone(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-brand-surface border border-brand-surface-bright rounded text-sm text-white focus:outline-none focus:border-brand-mint"
+                    />
                   </div>
-                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
-                    Gia nhập Discord Lion Invest để nhận file và các tài liệu hướng dẫn.
+
+                  <div className="flex space-x-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowToolModal(false)}
+                      className="flex-1 py-2.5 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright text-white font-display text-xs font-bold rounded transition-colors uppercase"
+                    >
+                      Hủy bỏ
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 py-2.5 bg-brand-mint hover:bg-white text-brand-bg font-display text-xs font-black rounded transition-colors uppercase"
+                    >
+                      Xác nhận nhận file
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              // STEP 2: Success State (Download started, show Discord & Register redirect)
+              <>
+                <div className="text-center space-y-2">
+                  <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
+                    <CheckCircle className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-display font-black text-lg text-white uppercase">
+                    Đã Bắt Đầu Tải Xuống!
+                  </h3>
+                  <p className="text-brand-gray text-xs font-sans leading-relaxed">
+                    Tệp tin <strong className="text-white">Nhat_Ky_Giao_Dich_Lion_Invest_Bootcamp.xls</strong> đang được tự động tải về máy của bạn. Vui lòng kiểm tra thư mục tải về.
                   </p>
                 </div>
-                <div className="bg-brand-surface-bright text-brand-mint p-2 rounded-full group-hover:scale-110 transition-transform border border-brand-mint/20">
-                  <ExternalLink className="w-4 h-4" />
-                </div>
-              </a>
 
-              {/* Option 3: Register Form */}
-              <button
-                onClick={() => {
-                  setShowToolModal(false);
-                  handleScrollToRegister();
-                }}
-                className="w-full p-4 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright hover:border-brand-mint/30 rounded-lg flex items-center justify-between transition-all group"
-              >
-                <div className="text-left space-y-1">
-                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
-                    Cách 3: Đăng ký đội ngũ hướng dẫn
-                  </div>
-                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
-                    Để lại thông tin ở biểu mẫu bên dưới để được hướng dẫn tham gia nhóm.
-                  </p>
-                </div>
-                <div className="bg-brand-surface-bright text-white p-2 rounded-full group-hover:scale-110 transition-transform">
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </button>
-            </div>
+                <div className="space-y-4">
+                  {/* Join Discord option */}
+                  <a
+                    href="https://discord.gg/5nMrdAWxE"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block w-full p-4 bg-brand-mint-bg/20 hover:bg-brand-mint/20 border border-brand-mint/30 hover:border-brand-mint rounded-lg flex items-center justify-between transition-all group"
+                  >
+                    <div className="text-left space-y-1">
+                      <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                        Truy cập Discord Lion Invest
+                      </div>
+                      <p className="text-[10px] text-brand-gray-light font-sans font-light">
+                        Gia nhập cộng đồng để thảo luận và nhận tài liệu training.
+                      </p>
+                    </div>
+                    <div className="bg-brand-mint text-brand-bg p-2 rounded-full group-hover:scale-110 transition-transform">
+                      <ExternalLink className="w-4 h-4" />
+                    </div>
+                  </a>
 
-            <div className="pt-2 flex justify-center">
-              <button
-                type="button"
-                onClick={() => setShowToolModal(false)}
-                className="px-6 py-2 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright text-white font-display text-xs font-bold rounded transition-colors uppercase"
-              >
-                Đóng cửa sổ
-              </button>
-            </div>
+                  {/* Register Option */}
+                  <button
+                    onClick={() => {
+                      setShowToolModal(false);
+                      setToolSubmitted(false);
+                      setToolPhone('');
+                      handleScrollToRegister();
+                    }}
+                    className="w-full p-4 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright hover:border-brand-mint/30 rounded-lg flex items-center justify-between transition-all group"
+                  >
+                    <div className="text-left space-y-1">
+                      <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                        Đăng ký tham gia Bootcamp
+                      </div>
+                      <p className="text-[10px] text-brand-gray-light font-sans font-light">
+                        Đăng ký thông tin bên dưới để được hướng dẫn tham gia nhóm.
+                      </p>
+                    </div>
+                    <div className="bg-brand-surface-bright text-white p-2 rounded-full group-hover:scale-110 transition-transform">
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </button>
+                </div>
+
+                <div className="pt-2 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowToolModal(false);
+                      setToolSubmitted(false);
+                      setToolPhone('');
+                    }}
+                    className="px-6 py-2 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright text-white font-display text-xs font-bold rounded transition-colors uppercase"
+                  >
+                    Đóng cửa sổ
+                  </button>
+                </div>
+              </>
+            )}
 
           </div>
         </div>
