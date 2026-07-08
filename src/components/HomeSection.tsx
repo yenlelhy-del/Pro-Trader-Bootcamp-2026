@@ -127,16 +127,21 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               Chứng minh năng lực quản trị rủi ro để nhận đặc quyền hạn mức giao dịch lớn và giữ lại tới 80% lợi nhuận trong môi trường chuyên nghiệp nhất.
             </p>
 
-            <div className="bg-brand-surface border border-brand-mint/30 p-4 rounded-md flex items-start space-x-3 max-w-xl shadow-[0_0_15px_rgba(0,225,161,0.05)]">
-              <Zap className="w-5 h-5 text-brand-mint flex-shrink-0 mt-0.5" />
-              <div className="space-y-1 font-sans text-left">
-                <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
-                  Lịch Trình Bootcamp 2026
-                </div>
-                <p className="text-brand-gray-light text-xs leading-relaxed">
-                  📅 <strong>Khai mạc & Bắt đầu chính thức Vòng 1:</strong> Ngày 20/07/2026.
-                  <br />
-                  🔥 <strong>CTA Đăng ký sớm:</strong> Hoàn tất đăng ký ngay hôm nay để bắt đầu nhận các tài liệu training thực chiến độc quyền trước thềm giải đấu!
+            <div className="grid grid-cols-1 sm:grid-cols-2 border border-brand-surface-bright rounded-lg overflow-hidden max-w-2xl bg-brand-container/50 font-display">
+              <div className="p-4 border-b sm:border-b-0 sm:border-r border-brand-surface-bright flex flex-col justify-center space-y-1 text-left">
+                <span className="text-[9px] uppercase tracking-widest text-brand-mint font-black">
+                  Khai mạc & Kick-off Vòng 1
+                </span>
+                <span className="text-xl font-mono font-black text-white">
+                  20.07.2026
+                </span>
+              </div>
+              <div className="p-4 flex flex-col justify-center space-y-1 text-left">
+                <span className="text-[9px] uppercase tracking-widest text-[#ffe58f] font-black">
+                  Ưu đãi đăng ký sớm
+                </span>
+                <p className="text-brand-gray-light text-[10px] sm:text-[11px] leading-relaxed font-sans font-normal">
+                  Đăng ký ngay hôm nay để bắt đầu nhận tài liệu training thực chiến từ ban tổ chức.
                 </p>
               </div>
             </div>
@@ -961,10 +966,13 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             <p className="text-brand-gray text-xs font-sans">
               Bắt đầu hành trình Pro Trader kỷ luật ngay hôm nay
             </p>
-            <div className="bg-brand-mint/5 border border-brand-mint/20 p-2.5 rounded text-center text-[10px] text-brand-mint font-sans leading-relaxed mt-2">
-              🚀 <strong>KICK-OFF VÒNG 1: 20/07/2026</strong>
-              <br />
-              Đăng ký sớm hôm nay để bắt đầu nhận ngay các tài liệu training thực chiến!
+            <div className="border-l-2 border-brand-mint bg-brand-surface-bright/20 p-3 rounded-r text-left font-sans text-xs text-brand-gray-light mt-4 space-y-1">
+              <div className="font-display font-black text-[10px] uppercase tracking-wider text-brand-mint">
+                Lịch Trình Bootcamp 2026
+              </div>
+              <p className="leading-relaxed text-[11px]">
+                Khai mạc & bắt đầu Vòng 1 vào ngày <strong className="text-white">20/07/2026</strong>. Đăng ký sớm để bắt đầu nhận các tài liệu training thực chiến của ban tổ chức.
+              </p>
             </div>
           </div>
 
