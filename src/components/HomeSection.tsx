@@ -1263,9 +1263,15 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                   className="w-full px-4 py-3 bg-brand-surface border border-brand-surface-bright rounded text-sm text-white focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-mint transition-all"
                 >
                   <option value="" disabled className="bg-brand-container text-brand-gray">-- Chọn Môi giới hoặc tùy chọn khác --</option>
-                  <option value="0011000306" className="bg-brand-container text-white">Trịnh Thị Anh Thư (Mã: 0011000306)</option>
-                  <option value="0011000776" className="bg-brand-container text-white">Lê Vũ Tú Trinh (Mã: 0011000776)</option>
-                  <option value="0011000297" className="bg-brand-container text-white">Nguyễn Minh Quang (Mã: 0011000297)</option>
+                  {brand.id === 'tiger' ? (
+                    <option value="BK07206" className="bg-brand-container text-white">Đặng Minh Đức (Mã: BK07206)</option>
+                  ) : (
+                    <>
+                      <option value="0011000306" className="bg-brand-container text-white">Trịnh Thị Anh Thư (Mã: 0011000306)</option>
+                      <option value="0011000776" className="bg-brand-container text-white">Lê Vũ Tú Trinh (Mã: 0011000776)</option>
+                      <option value="0011000297" className="bg-brand-container text-white">Nguyễn Minh Quang (Mã: 0011000297)</option>
+                    </>
+                  )}
                   <option value="Khác" className="bg-brand-container text-white">Khác (Không có / Môi giới tự do)</option>
                 </select>
               </div>
@@ -1469,92 +1475,156 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
           <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={() => setShowBrokerModal(false)} />
           <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-lg w-full relative z-10 space-y-6 max-h-[90vh] overflow-y-auto">
 
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
-                <CheckCircle className="w-6 h-6" />
-              </div>
-              <h3 className="font-display font-black text-lg text-white uppercase">
-                MỞ TÀI KHOẢN CTCK KB SECURITIES (KBSV)
-              </h3>
-              <p className="text-brand-gray text-xs font-sans">
-                Đăng ký mở tài khoản giao dịch ưu đãi tại đối tác Công ty Chứng khoán chính thức cho giải đấu Bootcamp 2026:
-              </p>
-            </div>
-
-            <div className="space-y-4 animate-fade-in">
-
-              {/* Sub-broker Selection Cards */}
-              <div className="space-y-1.5">
-                <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-wider font-display">
-                  CHỌN MÔI GIỚI HỖ TRỢ (KBSV):
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {kbsvBrokers.map((broker, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setSelectedKbsvBroker(idx)}
-                      className={`py-2.5 px-1 text-[10px] font-bold font-display rounded border text-center transition-all leading-tight ${selectedKbsvBroker === idx
-                          ? 'bg-brand-mint-bg text-brand-mint border-brand-mint shadow-[0_0_8px_rgba(255,208,44,0.15)]'
-                          : 'bg-brand-surface border-brand-surface-bright text-brand-gray-light hover:text-white'
-                        }`}
-                    >
-                      <div>{broker.name}</div>
-                      <div className="font-mono text-[8px] text-brand-gray mt-0.5">ID: {broker.id}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Selected KBSV Broker Details Card */}
-              <div className="bg-brand-surface border border-brand-mint/40 p-5 rounded-lg space-y-4 relative overflow-hidden group hover:border-brand-mint transition-all">
-                <div className="absolute top-0 right-0 bg-brand-mint/10 border-b border-l border-brand-mint/20 px-3 py-1 rounded-bl text-[9px] font-black text-brand-mint uppercase tracking-widest font-display">
-                  ĐỐI TÁC CHÍNH THỨC
-                </div>
-
-                <div className="space-y-1.5">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-base sm:text-lg font-display font-black text-white">CTCK KB SECURITIES (KBSV)</span>
-                    <span className="text-[10px] bg-brand-mint text-brand-bg px-2 py-0.5 rounded font-bold font-display uppercase tracking-wider">
-                      KBSV
-                    </span>
+            {brand.id === 'tiger' ? (
+              // TIGER INVEST: Single broker Đặng Minh Đức with direct KIS Link
+              <>
+                <div className="text-center space-y-2">
+                  <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
+                    <CheckCircle className="w-6 h-6" />
                   </div>
-                  <p className="text-brand-gray-light text-xs font-sans leading-relaxed">
-                    Sử dụng điện thoại để quét mã QR bên dưới hoặc quét trong ứng dụng **KB Buddy** để mở tài khoản eKYC liên kết trực tiếp với mã môi giới hỗ trợ.
+                  <h3 className="font-display font-black text-lg text-white uppercase">
+                    MỞ TÀI KHOẢN CTCK KIS VIỆT NAM
+                  </h3>
+                  <p className="text-brand-gray text-xs font-sans">
+                    Đăng ký mở tài khoản giao dịch ưu đãi tại đối tác Công ty Chứng khoán chính thức cho giải đấu Bootcamp 2026:
                   </p>
                 </div>
 
-                {/* Broker Info Matrix */}
-                <div className="grid grid-cols-2 gap-3 bg-brand-container border border-brand-surface-bright/50 p-3 rounded font-display text-xs">
-                  <div>
-                    <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Broker Phụ Trách:</span>
-                    <span className="font-bold text-white uppercase">{kbsvBrokers[selectedKbsvBroker].name}</span>
+                <div className="bg-brand-surface border border-brand-mint/40 p-5 rounded-lg space-y-4 relative overflow-hidden group hover:border-brand-mint transition-all">
+                  <div className="absolute top-0 right-0 bg-brand-mint/10 border-b border-l border-brand-mint/20 px-3 py-1 rounded-bl text-[9px] font-black text-brand-mint uppercase tracking-widest font-display">
+                    ĐỐI TÁC CHIẾN LƯỢC
                   </div>
-                  <div>
-                    <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Mã Số Broker (ID):</span>
-                    <span className="font-mono font-bold text-brand-mint">{kbsvBrokers[selectedKbsvBroker].id}</span>
+
+                  <div className="space-y-1.5">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-base sm:text-lg font-display font-black text-white">CTCK KIS VIỆT NAM</span>
+                      <span className="text-[10px] bg-brand-mint text-brand-bg px-2 py-0.5 rounded font-bold font-display uppercase tracking-wider">
+                        KIS SECURITIES
+                      </span>
+                    </div>
+                    <p className="text-brand-gray-light text-xs font-sans leading-relaxed">
+                      Mở tài khoản eKYC trực tuyến nhanh chóng với chính sách phí cực kỳ ưu đãi và hệ thống giao dịch hiện đại, ổn định bậc nhất thị trường Việt Nam.
+                    </p>
                   </div>
+
+                  {/* Broker Info Matrix */}
+                  <div className="grid grid-cols-2 gap-3 bg-brand-container border border-brand-surface-bright/50 p-3.5 rounded font-display text-xs">
+                    <div>
+                      <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Broker Phụ Trách:</span>
+                      <span className="font-bold text-white uppercase">ĐẶNG MINH ĐỨC</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Mã Số Broker (ID):</span>
+                      <span className="font-mono font-bold text-brand-mint">BK07206</span>
+                    </div>
+                    <div className="col-span-2 border-t border-brand-surface-bright/30 pt-2 mt-1">
+                      <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Hotline / Zalo hỗ trợ:</span>
+                      <span className="font-bold text-white">0398 992 555</span>
+                    </div>
+                  </div>
+
+                  {/* Open Account Button */}
+                  <a
+                    href="https://trading.kisvn.vn/ekyc/main?brokerPhone=0398992555&brokerName=%C4%90%E1%BA%B6NG%2520MINH%2520%C4%90%E1%BB%A8C&brokerId=BK07206"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3.5 bg-brand-mint text-brand-bg hover:bg-white font-display text-xs font-black tracking-widest rounded transition-all flex items-center justify-center space-x-2 uppercase text-center glow-mint"
+                  >
+                    <span>MỞ TÀI KHOẢN KIS NGAY</span>
+                    <ArrowRight className="w-4.5 h-4.5" />
+                  </a>
+                </div>
+              </>
+            ) : (
+              // LION INVEST: Dynamic KBSV layout with 3 brokers
+              <>
+                <div className="text-center space-y-2">
+                  <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
+                    <CheckCircle className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-display font-black text-lg text-white uppercase">
+                    MỞ TÀI KHOẢN CTCK KB SECURITIES (KBSV)
+                  </h3>
+                  <p className="text-brand-gray text-xs font-sans">
+                    Đăng ký mở tài khoản giao dịch ưu đãi tại đối tác Công ty Chứng khoán chính thức cho giải đấu Bootcamp 2026:
+                  </p>
                 </div>
 
-                {/* Dynamic QR Code display */}
-                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-lg border border-brand-surface-bright/50 max-w-[200px] mx-auto shadow-[0_0_20px_rgba(255,208,44,0.1)]">
-                  <img
-                    src={kbsvBrokers[selectedKbsvBroker].qrPath}
-                    alt={`QR Code ${kbsvBrokers[selectedKbsvBroker].name}`}
-                    className="w-36 h-36 object-contain"
-                    referrerPolicy="no-referrer"
-                  />
-                  <span className="text-[10px] text-brand-bg font-black mt-2 uppercase font-display leading-none">
-                    {kbsvBrokers[selectedKbsvBroker].name}
-                  </span>
-                  <span className="text-[9px] text-brand-bg/60 font-mono mt-0.5 leading-none">
-                    ID: {kbsvBrokers[selectedKbsvBroker].id}
-                  </span>
+                <div className="space-y-4 animate-fade-in">
+                  {/* Sub-broker Selection Cards */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-wider font-display">
+                      CHỌN MÔI GIỚI HỖ TRỢ (KBSV):
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {kbsvBrokers.map((broker, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setSelectedKbsvBroker(idx)}
+                          className={`py-2.5 px-1 text-[10px] font-bold font-display rounded border text-center transition-all leading-tight ${selectedKbsvBroker === idx
+                              ? 'bg-brand-mint-bg text-brand-mint border-brand-mint shadow-[0_0_8px_rgba(255,208,44,0.15)]'
+                              : 'bg-brand-surface border-brand-surface-bright text-brand-gray-light hover:text-white'
+                            }`}
+                        >
+                          <div>{broker.name}</div>
+                          <div className="font-mono text-[8px] text-brand-gray mt-0.5">ID: {broker.id}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Selected KBSV Broker Details Card */}
+                  <div className="bg-brand-surface border border-brand-mint/40 p-5 rounded-lg space-y-4 relative overflow-hidden group hover:border-brand-mint transition-all">
+                    <div className="absolute top-0 right-0 bg-brand-mint/10 border-b border-l border-brand-mint/20 px-3 py-1 rounded-bl text-[9px] font-black text-brand-mint uppercase tracking-widest font-display">
+                      ĐỐI TÁC CHÍNH THỨC
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-base sm:text-lg font-display font-black text-white">CTCK KB SECURITIES (KBSV)</span>
+                        <span className="text-[10px] bg-brand-mint text-brand-bg px-2 py-0.5 rounded font-bold font-display uppercase tracking-wider">
+                          KBSV
+                        </span>
+                      </div>
+                      <p className="text-brand-gray-light text-xs font-sans leading-relaxed">
+                        Sử dụng điện thoại để quét mã QR bên dưới hoặc quét trong ứng dụng **KB Buddy** để mở tài khoản eKYC liên kết trực tiếp với mã môi giới hỗ trợ.
+                      </p>
+                    </div>
+
+                    {/* Broker Info Matrix */}
+                    <div className="grid grid-cols-2 gap-3 bg-brand-container border border-brand-surface-bright/50 p-3 rounded font-display text-xs">
+                      <div>
+                        <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Broker Phụ Trách:</span>
+                        <span className="font-bold text-white uppercase">{kbsvBrokers[selectedKbsvBroker].name}</span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider block">Mã Số Broker (ID):</span>
+                        <span className="font-mono font-bold text-brand-mint">{kbsvBrokers[selectedKbsvBroker].id}</span>
+                      </div>
+                    </div>
+
+                    {/* Dynamic QR Code display */}
+                    <div className="flex flex-col items-center justify-center p-3 bg-white rounded-lg border border-brand-surface-bright/50 max-w-[200px] mx-auto shadow-[0_0_20px_rgba(255,208,44,0.1)]">
+                      <img
+                        src={kbsvBrokers[selectedKbsvBroker].qrPath}
+                        alt={`QR Code ${kbsvBrokers[selectedKbsvBroker].name}`}
+                        className="w-36 h-36 object-contain"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="text-[10px] text-brand-bg font-black mt-2 uppercase font-display leading-none">
+                        {kbsvBrokers[selectedKbsvBroker].name}
+                      </span>
+                      <span className="text-[9px] text-brand-bg/60 font-mono mt-0.5 leading-none">
+                        ID: {kbsvBrokers[selectedKbsvBroker].id}
+                      </span>
+                    </div>
+
+                  </div>
+
                 </div>
-
-              </div>
-
-            </div>
+              </>
+            )}
 
             <div className="border-t border-brand-surface-bright/50 pt-4 text-[10px] text-brand-gray text-center font-sans leading-relaxed">
               * Sau khi hoàn thành mở tài khoản trực tuyến eKYC, vui lòng chụp lại màn hình số hiệu tài khoản và gửi cho broker phụ trách để nhận phân bổ phòng giao dịch.

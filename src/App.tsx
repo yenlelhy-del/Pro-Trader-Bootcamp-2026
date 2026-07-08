@@ -32,6 +32,7 @@ export default function App() {
       if (brokerCode === '0011000306') brokerName = 'Trịnh Thị Anh Thư';
       else if (brokerCode === '0011000776') brokerName = 'Lê Vũ Tú Trinh';
       else if (brokerCode === '0011000297') brokerName = 'Nguyễn Minh Quang';
+      else if (brokerCode === 'BK07206') brokerName = 'Đặng Minh Đức';
 
       const payload = {
         name,
