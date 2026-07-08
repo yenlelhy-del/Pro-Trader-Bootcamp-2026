@@ -104,18 +104,18 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 md:pt-16 pb-12">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
-          {/* Left Text */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-brand-mint-bg border border-brand-mint/40 px-3.5 py-1.5 rounded-full">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-center">
+          
+          {/* Top Title Block */}
+          <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="inline-flex items-center space-x-2 bg-brand-mint-bg border border-brand-mint/40 px-3.5 py-1.5 rounded-full mx-auto">
               <span className="w-2 h-2 rounded-full bg-brand-mint animate-ping" />
               <span className="font-display text-[10px] sm:text-xs font-black tracking-widest text-brand-mint uppercase">
                 Đồng hành giao dịch thực chiến
               </span>
             </div>
 
-            <h1 className="font-display font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight tracking-tight">
+            <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-white leading-tight tracking-tight uppercase">
               GIAO DỊCH KỶ LUẬT <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-mint via-[#ffe58f] to-brand-mint">
                 HẠN MỨC KHỦNG
@@ -123,68 +123,93 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               CHIA THƯỞNG TỚI <span className="text-brand-mint">80%</span>
             </h1>
 
-            <p className="text-brand-gray-light text-sm sm:text-base md:text-lg max-w-2xl font-sans font-light leading-relaxed">
+            <p className="text-brand-gray-light text-sm sm:text-base md:text-lg max-w-3xl mx-auto font-sans font-light leading-relaxed">
               Chứng minh năng lực quản trị rủi ro để nhận đặc quyền hạn mức giao dịch lớn và giữ lại tới 80% lợi nhuận trong môi trường chuyên nghiệp nhất.
             </p>
-
-            <div className="border border-brand-surface-bright rounded-lg p-5 bg-[#161410] max-w-2xl font-display space-y-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center justify-between border-b border-brand-surface-bright pb-3">
-                <h4 className="text-[10px] sm:text-xs font-black tracking-widest text-[#ffe58f] uppercase">
-                  Lịch Trình Bootcamp 2026
-                </h4>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-brand-mint/10 text-brand-mint border border-brand-mint/20 uppercase font-black tracking-wider">
-                  Sắp Bắt Đầu
-                </span>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Mốc 1 */}
-                <div className="relative pl-5 border-l border-brand-surface-bright/50 space-y-1 text-left">
-                  <div className="absolute -left-1 top-1 w-2 h-2 rounded-full bg-brand-surface-bright border border-brand-bg" />
-                  <div className="text-[9px] text-brand-gray uppercase tracking-widest font-black">Mốc 1: Đăng ký sớm</div>
-                  <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
-                    Đăng ký ngay hôm nay để bắt đầu nhận tài liệu training thực chiến độc quyền.
-                  </p>
-                </div>
-
-                {/* Mốc 2 */}
-                <div className="relative pl-5 border-l border-brand-mint space-y-1.5 text-left">
-                  <div className="absolute -left-1 top-1.5 w-2 h-2 rounded-full bg-brand-mint border border-brand-bg shadow-[0_0_8px_rgba(0,225,161,0.6)] animate-pulse" />
-                  <div className="text-[9px] text-brand-mint uppercase tracking-widest font-black">Mốc 2: Kick-off Vòng 1</div>
-                  <div className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-brand-mint leading-none">
-                    20.07.2026
-                  </div>
-                  <p className="text-[11px] text-brand-gray-light font-sans font-light">
-                    Bắt đầu giao dịch thực chiến tranh tài kỷ luật.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={handleScrollToOpenAccount}
-                className="px-6 py-4 bg-brand-mint text-brand-bg font-display font-black text-xs sm:text-sm tracking-wider rounded-md transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,225,161,0.4)] hover:bg-white transform hover:-translate-y-0.5 text-center uppercase"
-                id="hero-cta-btn"
-              >
-                [ THAM GIA THỬ THÁCH - MỞ TÀI KHOẢN NGAY ]
-              </button>
-            </div>
           </div>
 
-          {/* Right Image Display */}
-          <div className="lg:col-span-6 relative mt-8 lg:mt-0">
+          {/* Central Image Display - Centered and Big */}
+          <div className="max-w-[1000px] mx-auto relative">
             <div className="relative z-10 rounded-lg overflow-hidden border border-brand-surface-bright/80 shadow-[0_0_50px_rgba(4,45,32,0.6)]">
               <img
                 src={cyberMascotsImg}
-                alt="Cyber Trading Terminal Mascots"
-                className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+                alt="Cyber Trading Mascots"
+                className="w-full h-auto object-cover max-h-[480px]"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/60 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/40 via-transparent to-transparent pointer-events-none" />
             </div>
             {/* Ambient glows behind the image */}
-            <div className="absolute -inset-4 bg-brand-mint/5 rounded-full filter blur-2xl pointer-events-none" />
+            <div className="absolute -inset-4 bg-brand-mint/5 rounded-full filter blur-3xl pointer-events-none" />
+          </div>
+
+          {/* Bottom Timeline & CTA Grid - Matches the 3 Golden Rules styling */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1200px] mx-auto pt-4 text-left">
+            
+            {/* Card 1: Mốc 1 */}
+            <div className="bg-brand-surface border border-brand-surface-bright hover:border-brand-mint/30 p-6 rounded-lg transition-all duration-300 flex flex-col justify-between space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center border-b border-brand-surface-bright pb-2">
+                  <span className="text-[9px] text-brand-gray uppercase tracking-widest font-black">
+                    Mốc thời gian 01
+                  </span>
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-brand-surface-bright text-brand-gray border border-brand-surface-bright uppercase font-bold tracking-wider">
+                    Đang diễn ra
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-base text-white uppercase tracking-wider">
+                  Đăng Ký Sớm
+                </h3>
+                <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
+                  Đăng ký ngay hôm nay để bắt đầu nhận tài liệu training thực chiến độc quyền từ ban tổ chức trước thềm giải đấu.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2: Mốc 2 */}
+            <div className="bg-brand-surface border border-brand-mint/30 p-6 rounded-lg transition-all duration-300 flex flex-col justify-between space-y-4 shadow-[0_0_15px_rgba(0,225,161,0.03)]">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center border-b border-brand-mint/20 pb-2">
+                  <span className="text-[9px] text-brand-mint uppercase tracking-widest font-black">
+                    Mốc thời gian 02
+                  </span>
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-brand-mint/10 text-brand-mint border border-brand-mint/20 uppercase font-black tracking-wider animate-pulse">
+                    Khai mạc
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-white to-brand-mint uppercase tracking-wider">
+                  Khai Mạc Vòng 1
+                </h3>
+                <div className="text-3xl font-mono font-black text-brand-mint tracking-tight py-1">
+                  20.07.2026
+                </div>
+                <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
+                  Chính thức mở cổng giao dịch tính điểm thực chiến, áp dụng bộ luật kỷ luật quản trị rủi ro Bootcamp.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3: CTA Action */}
+            <div className="bg-brand-surface border border-brand-surface-bright p-6 rounded-lg flex flex-col justify-between items-stretch">
+              <div className="space-y-2">
+                <h3 className="font-display font-black text-xs text-brand-gray uppercase tracking-widest">
+                  Thử Thách Pro Trader
+                </h3>
+                <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
+                  Chứng minh kỷ luật thép - Nhận hạn mức giao dịch thực tế - Chia sẻ lợi nhuận đỉnh cao cùng Lion Invest.
+                </p>
+              </div>
+              <div className="pt-4">
+                <button
+                  onClick={handleScrollToOpenAccount}
+                  className="w-full py-4 bg-brand-mint text-brand-bg font-display font-black text-xs tracking-widest rounded transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,225,161,0.4)] hover:bg-white transform hover:-translate-y-0.5 text-center uppercase"
+                  id="hero-cta-btn"
+                >
+                  Tham Gia Ngay
+                </button>
+              </div>
+            </div>
+
           </div>
 
         </div>
