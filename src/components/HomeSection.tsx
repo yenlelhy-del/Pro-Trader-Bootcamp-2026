@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, TrendingUp, Award, ArrowRight, Download, CheckCircle, Phone, HelpCircle, Activity, Info, Zap } from 'lucide-react';
+import { Shield, TrendingUp, Award, ArrowRight, Download, CheckCircle, Phone, HelpCircle, Activity, Info, Zap, ExternalLink, ChevronRight } from 'lucide-react';
 
 import cyberMascotsImg from '../assets/images/cyber_trading_mascots_1783395625371.jpg';
 import riskToolImg from '../assets/images/risk_management_tool_1783395641022.jpg';
@@ -50,6 +50,174 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       qrPath: qrQuangImg
     }
   ];
+
+  const downloadExcelTemplate = () => {
+    const excelContent = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <!--[if gte mso 9]>
+  <xml>
+    <x:ExcelWorkbook>
+      <x:ExcelWorksheets>
+        <x:ExcelWorksheet>
+          <x:Name>Nhat Ky Giao Dich</x:Name>
+          <x:WorksheetOptions>
+            <x:DisplayGridlines/>
+          </x:WorksheetOptions>
+        </x:ExcelWorksheet>
+      </x:ExcelWorksheets>
+    </x:ExcelWorkbook>
+  </xml>
+  <![endif]-->
+  <style>
+    body { font-family: Arial, sans-serif; }
+    table { border-collapse: collapse; width: 100%; }
+    th { background-color: #0c1a15; color: #00e1a1; font-weight: bold; border: 1px solid #2d5a47; text-align: center; height: 35px; }
+    td { border: 1px solid #d3d3d3; padding: 8px; text-align: center; }
+    .title-row { font-size: 16pt; font-weight: bold; color: #111111; text-align: left; height: 40px; }
+    .subtitle-row { font-size: 10pt; italic: true; color: #555555; text-align: left; height: 25px; }
+    .label-cell { background-color: #f2f2f2; font-weight: bold; text-align: left; }
+    .value-cell { font-weight: bold; }
+    .profit { color: #008055; font-weight: bold; }
+    .loss { color: #cc3333; font-weight: bold; }
+    .status-ok { background-color: #e6f9f2; color: #008055; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td colspan="9" class="title-row" style="color: #00e1a1; background-color: #0b0f19; text-align: center; height: 50px; font-size: 18pt;">NHẬT KÝ GIAO DỊCH & QUẢN TRỊ RỦI RO - BOOTCAMP 2026</td>
+    </tr>
+    <tr>
+      <td colspan="9" class="subtitle-row" style="background-color: #0b0f19; color: #8892b0; text-align: center; height: 30px;">Cung cấp bởi Lion Invest | Hỗ trợ quản trị rủi ro & giao dịch kỷ luật</td>
+    </tr>
+    <tr><td colspan="9" style="border:none; height:10px;"></td></tr>
+    
+    <!-- ACCOUNT SUMMARY -->
+    <tr>
+      <td colspan="3" class="label-cell">Vốn ban đầu (NAV Vòng 1)</td>
+      <td colspan="2" class="value-cell">50.000.000 đ</td>
+      <td colspan="2" class="label-cell">Sụt giảm Max (Daily Drawdown)</td>
+      <td colspan="2" class="value-cell" style="color:#cc3333;">-0.00%</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="label-cell">NAV Hiện tại</td>
+      <td colspan="2" class="value-cell" style="color:#008055;">52.890.000 đ</td>
+      <td colspan="2" class="label-cell">Tỷ lệ thắng (Win Rate)</td>
+      <td colspan="2" class="value-cell">100.0%</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="label-cell">Trạng thái thử thách</td>
+      <td colspan="6" class="status-ok">ĐẠT TIÊU CHUẨN (+5.78% NAV)</td>
+    </tr>
+    
+    <tr><td colspan="9" style="border:none; height:20px;"></td></tr>
+
+    <!-- RULES CHECKLIST -->
+    <tr>
+      <th colspan="5" style="background-color: #0b0f19; color: #00e1a1;">GIÁM SÁT LUẬT KỶ LUẬT</th>
+      <th colspan="2" style="background-color: #0b0f19; color: #00e1a1;">YÊU CẦU</th>
+      <th colspan="2" style="background-color: #0b0f19; color: #00e1a1;">TRẠNG THÁI TRONG GIẢI</th>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:left;">1. Giới hạn sụt giảm ngày (Daily Drawdown)</td>
+      <td colspan="2">&lt; 4.0% NAV</td>
+      <td colspan="2" class="status-ok" style="background-color: #e6f9f2; color: #008055;">ĐẠT</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:left;">2. Giới hạn sụt giảm tổng (Overall Drawdown)</td>
+      <td colspan="2">&lt; 8.0% NAV</td>
+      <td colspan="2" class="status-ok" style="background-color: #e6f9f2; color: #008055;">ĐẠT</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:left;">3. Quy tắc đa dạng hóa (Diversification)</td>
+      <td colspan="2">Max 40% NAV/Mã</td>
+      <td colspan="2" class="status-ok" style="background-color: #e6f9f2; color: #008055;">ĐẠT</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:left;">4. Quy tắc nhất quán (Consistency)</td>
+      <td colspan="2">Max 40% chỉ tiêu</td>
+      <td colspan="2" class="status-ok" style="background-color: #e6f9f2; color: #008055;">ĐẠT</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:left;">5. Bộ lọc thanh khoản (Liquidity)</td>
+      <td colspan="2">VN100 / &gt;200k</td>
+      <td colspan="2" class="status-ok" style="background-color: #e6f9f2; color: #008055;">ĐẠT</td>
+    </tr>
+
+    <tr><td colspan="9" style="border:none; height:20px;"></td></tr>
+
+    <!-- TRADE LOGS -->
+    <tr>
+      <th style="background-color: #0b0f19; color: #ffffff;">STT</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Thời Gian</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Mã CP</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Lệnh</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Khối Lượng</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Giá Entry (đ)</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Giá Exit (đ)</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Tỷ Trọng (%)</th>
+      <th style="background-color: #0b0f19; color: #ffffff;">Lợi Nhuận Thực Tế (đ)</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2026-07-08 00:07</td>
+      <td>FPT</td>
+      <td style="color:#008055; font-weight:bold;">BUY</td>
+      <td>100</td>
+      <td>73.000</td>
+      <td>100.000</td>
+      <td>20%</td>
+      <td class="profit" style="color:#008055;">+2.700.000</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2026-07-07 23:58</td>
+      <td>HPG</td>
+      <td style="color:#008055; font-weight:bold;">BUY</td>
+      <td>100</td>
+      <td>23.100</td>
+      <td>25.000</td>
+      <td>20%</td>
+      <td class="profit" style="color:#008055;">+190.000</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </table>
+</body>
+</html>
+    `;
+
+    const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Nhat_Ky_Giao_Dich_Lion_Invest_Bootcamp.xls';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
@@ -1147,56 +1315,96 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       </section>
 
 
-      {/* --- POPUP MODAL: RECEIVE FILE EXCEL VIA ZALO --- */}
+      {/* --- POPUP MODAL: RECEIVE FILE EXCEL --- */}
       {showToolModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={() => setShowToolModal(false)} />
-          <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-md w-full relative z-10 space-y-6">
+          <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-lg w-full relative z-10 space-y-6">
 
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
                 <Download className="w-6 h-6" />
               </div>
               <h3 className="font-display font-black text-lg text-white uppercase">
-                TẢI FILE EXCEL QUẢN TRỊ RỦI RO
+                Tải File Excel Nhật Ký & Quản Trị
               </h3>
-              <p className="text-brand-gray text-xs font-sans">
-                Vui lòng nhập số điện thoại Zalo của bạn để hệ thống tự động gửi link tải file Excel đặc quyền miễn phí.
+              <p className="text-brand-gray text-xs font-sans max-w-sm mx-auto leading-relaxed">
+                Tải xuống tệp Excel tiêu chuẩn được thiết lập sẵn bộ giám sát 5 luật kỷ luật và nhật ký vị thế của giải đấu Bootcamp 2026.
               </p>
             </div>
 
-            <form onSubmit={handleToolRequestSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-wider font-display">
-                  Số điện thoại Zalo của bạn:
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="e.g. 0901 234 567"
-                  value={toolPhone}
-                  onChange={(e) => setToolPhone(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-brand-surface border border-brand-surface-bright rounded text-sm text-white focus:outline-none focus:border-brand-mint"
-                />
-              </div>
+            <div className="space-y-4">
+              {/* Option 1: Direct Download */}
+              <button
+                onClick={() => {
+                  downloadExcelTemplate();
+                }}
+                className="w-full p-4 bg-brand-mint-bg/20 hover:bg-brand-mint/20 border border-brand-mint/30 hover:border-brand-mint rounded-lg flex items-center justify-between transition-all group"
+              >
+                <div className="text-left space-y-1">
+                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                    Cách 1: Tải trực tiếp File Excel
+                  </div>
+                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
+                    Tải ngay tệp Excel (.xls) có công thức và dữ liệu mẫu chuẩn.
+                  </p>
+                </div>
+                <div className="bg-brand-mint text-brand-bg p-2 rounded-full group-hover:scale-110 transition-transform">
+                  <Download className="w-4 h-4" />
+                </div>
+              </button>
 
-              <div className="flex space-x-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowToolModal(false)}
-                  className="flex-1 py-2.5 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright text-white font-display text-xs font-bold rounded transition-colors uppercase"
-                >
-                  Hủy bỏ
-                </button>
-                <button
-                  type="submit"
-                  disabled={toolSubmitted}
-                  className="flex-1 py-2.5 bg-brand-mint hover:bg-white text-brand-bg font-display text-xs font-black rounded transition-colors uppercase"
-                >
-                  {toolSubmitted ? 'Đang gửi...' : 'Xác nhận nhận file'}
-                </button>
-              </div>
-            </form>
+              {/* Option 2: Discord Community Link */}
+              <a
+                href="https://discord.gg/5nMrdAWxE"
+                target="_blank"
+                rel="noreferrer"
+                className="block w-full p-4 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright hover:border-brand-mint/30 rounded-lg flex items-center justify-between transition-all group"
+              >
+                <div className="text-left space-y-1">
+                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                    Cách 2: Nhận tại Discord Lion Invest
+                  </div>
+                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
+                    Gia nhập Discord Lion Invest để nhận file và các tài liệu hướng dẫn.
+                  </p>
+                </div>
+                <div className="bg-brand-surface-bright text-brand-mint p-2 rounded-full group-hover:scale-110 transition-transform border border-brand-mint/20">
+                  <ExternalLink className="w-4 h-4" />
+                </div>
+              </a>
+
+              {/* Option 3: Register Form */}
+              <button
+                onClick={() => {
+                  setShowToolModal(false);
+                  handleScrollToRegister();
+                }}
+                className="w-full p-4 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright hover:border-brand-mint/30 rounded-lg flex items-center justify-between transition-all group"
+              >
+                <div className="text-left space-y-1">
+                  <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
+                    Cách 3: Đăng ký đội ngũ hướng dẫn
+                  </div>
+                  <p className="text-[10px] text-brand-gray-light font-sans font-light">
+                    Để lại thông tin ở biểu mẫu bên dưới để được hướng dẫn tham gia nhóm.
+                  </p>
+                </div>
+                <div className="bg-brand-surface-bright text-white p-2 rounded-full group-hover:scale-110 transition-transform">
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
+            </div>
+
+            <div className="pt-2 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowToolModal(false)}
+                className="px-6 py-2 bg-brand-surface hover:bg-brand-surface-bright border border-brand-surface-bright text-white font-display text-xs font-bold rounded transition-colors uppercase"
+              >
+                Đóng cửa sổ
+              </button>
+            </div>
 
           </div>
         </div>
