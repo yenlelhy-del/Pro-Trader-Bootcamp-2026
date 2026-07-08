@@ -34,7 +34,7 @@ export const BRANDS: Record<'lion' | 'tiger', BrandConfig> = {
     discordLink: 'https://discord.gg/SKft9ac8fS',
     communityText: 'CỘNG ĐỒNG: TIGER INVEST DISCORD',
     excelSuccessText: 'Link tải file Excel Quản trị rủi ro & Nhật ký giao dịch đã được hệ thống gửi tới số Zalo đăng ký.',
-    webhookUrl: 'https://script.google.com/macros/s/AKfy_YOUR_TIGER_WEBHOOK_URL_HERE/exec',
+    webhookUrl: 'https://script.google.com/macros/s/AKfycbwq3MjcDyvH0MrphB7PRAmSy5XcYqEl-w8aAt_1bM5_ryWmO3y_UNIN2gXQS0cmwGE4/exec',
   }
 };
 
