@@ -568,7 +568,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
             <div className="grid grid-cols-2 gap-4 bg-brand-surface/80 p-4 rounded border border-brand-surface-bright/40 font-display">
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">NAV tối thiểu</span>
-                <span className="text-base sm:text-lg font-black text-white">30 triệu VND</span>
+                <span className="text-base sm:text-lg font-black text-white">10 triệu VND</span>
                 <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Nạp vào tài khoản CTCK chỉ định</span>
               </div>
               <div>
@@ -880,18 +880,18 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
             <div className="relative pt-2">
               <input
                 type="range"
-                min={30000000}
+                min={10000000}
                 max={500000000}
                 step={10000000}
                 value={capital}
                 onChange={(e) => setCapital(Number(e.target.value))}
                 className="w-full h-2 bg-brand-surface-bright rounded-lg appearance-none cursor-pointer accent-brand-mint focus:outline-none"
                 style={{
-                  background: `linear-gradient(to right, #ffd02c 0%, #ffd02c ${((capital - 30000000) / (500000000 - 30000000)) * 100}%, #353127 ${((capital - 30000000) / (500000000 - 30000000)) * 100}%, #353127 100%)`
+                  background: `linear-gradient(to right, ${brand.id === 'lion' ? '#00e1a1' : '#ffd02c'} 0%, ${brand.id === 'lion' ? '#00e1a1' : '#ffd02c'} ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 100%)`
                 }}
               />
               <div className="flex justify-between text-[10px] text-brand-gray font-mono mt-2">
-                <span>30 TRIỆU</span>
+                <span>10 TRIỆU</span>
                 <span>100 TRIỆU</span>
                 <span>200 TRIỆU</span>
                 <span>300 TRIỆU</span>
@@ -1157,7 +1157,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
               <div className="space-y-1">
                 <h4 className="font-display font-bold text-sm text-white uppercase">Bắt đầu thử thách thăng hạng</h4>
                 <p className="text-brand-gray text-xs sm:text-sm font-sans leading-relaxed">
-                  Nạp tối thiểu 30 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
+                  Nạp tối thiểu 10 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
                 </p>
               </div>
             </div>

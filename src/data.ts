@@ -167,7 +167,7 @@ export const INITIAL_TRADE_LOGS: TradeLog[] = [
 export const INITIAL_FAQS: FAQItem[] = [
   {
     id: "faq1",
-    question: "Số tiền nạp tối thiểu 30 triệu VND là gì?",
+    question: "Số tiền nạp tối thiểu 10 triệu VND là gì?",
     answer: "Đây là điều kiện cần tối thiểu để bắt đầu tham gia Chặng 1 (Thử thách kỷ luật). Số tiền này nạp vào tài khoản cá nhân của chính bạn tại Công ty Chứng khoán (CTCK) chỉ định. Bạn giữ toàn quyền sở hữu và rút tiền, không phải đóng phí cho Bootcamp. Mục đích là để đảm bảo tính thực tế và cam kết kỷ luật giao dịch.",
     category: "thể_lệ"
   },
