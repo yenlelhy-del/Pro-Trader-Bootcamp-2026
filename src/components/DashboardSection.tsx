@@ -256,7 +256,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
         </div>
 
         <div className="md:col-span-2 flex flex-wrap gap-3">
-          {[10000000, 30000000, 50000000, 100000000, 200000000, 500000000].map((cap) => (
+          {[30000000, 50000000, 100000000, 200000000, 500000000].map((cap) => (
             <button
               key={cap}
               onClick={() => setInitialCapital(cap)}

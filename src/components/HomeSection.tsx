@@ -568,7 +568,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
             <div className="grid grid-cols-2 gap-4 bg-brand-surface/80 p-4 rounded border border-brand-surface-bright/40 font-display">
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">NAV tối thiểu</span>
-                <span className="text-base sm:text-lg font-black text-white">10 triệu VND</span>
+                <span className="text-base sm:text-lg font-black text-white">30 triệu VND</span>
                 <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Nạp vào tài khoản CTCK chỉ định</span>
               </div>
               <div>
@@ -869,7 +869,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <label className="font-display font-bold text-xs uppercase text-brand-gray tracking-wider">
-                CHỌN VỐN GIAO DỊCH BAN ĐẦU (VÒNG 1):
+                CHỌN VỐN TỰ CÓ ĐỂ NHẬN CẤP VỐN (VÒNG 2):
               </label>
               <div className="font-mono text-2xl sm:text-3xl font-black text-brand-mint flex items-baseline">
                 <span>{formatNumberWithDots(capital / 1000000)}</span>
@@ -914,7 +914,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 <ul className="space-y-4 text-xs sm:text-sm text-brand-gray-light font-sans leading-relaxed">
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">7% NAV</strong>.</span>
+                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">8% NAV</strong>.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
@@ -944,10 +944,10 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 {/* Stat 1 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
-                    Giới hạn sụt giảm tối đa (7%):
+                    Giới hạn sụt giảm tối đa (8%):
                   </span>
                   <div className="text-lg sm:text-xl font-mono font-black text-brand-red mt-1.5">
-                    {formatNumberWithDots(Math.floor(capital * 0.07))} đ
+                    {formatNumberWithDots(Math.floor(capital * 0.08))} đ
                   </div>
                   <span className="text-[10px] text-brand-gray mt-1 block">
                     Bộ đệm rủi ro an toàn tuyệt đối
@@ -1157,7 +1157,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
               <div className="space-y-1">
                 <h4 className="font-display font-bold text-sm text-white uppercase">Bắt đầu thử thách thăng hạng</h4>
                 <p className="text-brand-gray text-xs sm:text-sm font-sans leading-relaxed">
-                  Nạp tối thiểu 10 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
+                  Nạp tối thiểu 30 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
                 </p>
               </div>
             </div>
