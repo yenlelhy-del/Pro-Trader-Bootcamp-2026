@@ -6,13 +6,15 @@ import riskToolImg from '../assets/images/risk_management_tool_1783395641022.jpg
 import qrThuImg from '../assets/images/kbsv_trinh_thi_anh_thu.png';
 import qrTrinhImg from '../assets/images/kbsv_le_vu_tu_trinh.png';
 import qrQuangImg from '../assets/images/kbsv_nguyen_minh_quang.png';
+import { BrandConfig } from '../brandConfig';
 
 interface HomeSectionProps {
   onRegisterSuccess: (name: string, phone: string, brokerCode: string) => void;
   setActiveTab: (tab: string) => void;
+  brand: BrandConfig;
 }
 
-export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSectionProps) {
+export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: HomeSectionProps) {
   // Calculator state
   const [capital, setCapital] = useState<number>(50000000); // 50 million VND default
 
@@ -73,7 +75,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
   <style>
     body { font-family: Arial, sans-serif; }
     table { border-collapse: collapse; width: 100%; }
-    th { background-color: #0c1a15; color: #00e1a1; font-weight: bold; border: 1px solid #2d5a47; text-align: center; height: 35px; }
+    th { background-color: ${brand.id === 'tiger' ? '#0c1a15' : '#27210c'}; color: ${brand.id === 'tiger' ? '#00e1a1' : '#ffd02c'}; font-weight: bold; border: 1px solid ${brand.id === 'tiger' ? '#2d5a47' : '#5a461b'}; text-align: center; height: 35px; }
     td { border: 1px solid #d3d3d3; padding: 8px; text-align: center; }
     .title-row { font-size: 16pt; font-weight: bold; color: #111111; text-align: left; height: 40px; }
     .subtitle-row { font-size: 10pt; italic: true; color: #555555; text-align: left; height: 25px; }
@@ -87,10 +89,10 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 <body>
   <table>
     <tr>
-      <td colspan="9" class="title-row" style="color: #00e1a1; background-color: #0b0f19; text-align: center; height: 50px; font-size: 18pt;">NHẬT KÝ GIAO DỊCH & QUẢN TRỊ RỦI RO - BOOTCAMP 2026</td>
+      <td colspan="9" class="title-row" style="color: ${brand.id === 'tiger' ? '#00e1a1' : '#ffd02c'}; background-color: #0b0f19; text-align: center; height: 50px; font-size: 18pt;">NHẬT KÝ GIAO DỊCH & QUẢN TRỊ RỦI RO - BOOTCAMP 2026</td>
     </tr>
     <tr>
-      <td colspan="9" class="subtitle-row" style="background-color: #0b0f19; color: #8892b0; text-align: center; height: 30px;">Cung cấp bởi Lion Invest | Hỗ trợ quản trị rủi ro & giao dịch kỷ luật</td>
+      <td colspan="9" class="subtitle-row" style="background-color: #0b0f19; color: #8892b0; text-align: center; height: 30px;">Cung cấp bởi ${brand.id === 'tiger' ? 'Tiger Invest' : 'Lion Invest'} | Hỗ trợ quản trị rủi ro & giao dịch kỷ luật</td>
     </tr>
     <tr><td colspan="9" style="border:none; height:10px;"></td></tr>
     
@@ -347,7 +349,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             </div>
 
             {/* Card 2: Mốc 2 */}
-            <div className="bg-brand-surface border border-brand-mint/30 p-6 rounded-lg transition-all duration-300 flex flex-col justify-between space-y-4 shadow-[0_0_15px_rgba(0,225,161,0.03)]">
+            <div className="bg-brand-surface border border-brand-mint/30 p-6 rounded-lg transition-all duration-300 flex flex-col justify-between space-y-4 shadow-[0_0_15px_rgba(var(--brand-glow),0.03)]">
               <div className="space-y-2">
                 <div className="flex justify-between items-center border-b border-brand-mint/20 pb-2">
                   <span className="text-[9px] text-brand-mint uppercase tracking-widest font-black">
@@ -376,13 +378,13 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
                   Thử Thách Pro Trader
                 </h3>
                 <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
-                  Chứng minh kỷ luật thép - Nhận hạn mức giao dịch thực tế - Chia sẻ lợi nhuận đỉnh cao cùng Lion Invest.
+                  Chứng minh kỷ luật thép - Nhận hạn mức giao dịch thực tế - Chia sẻ lợi nhuận đỉnh cao cùng {brand.id === 'tiger' ? 'Tiger Invest' : 'Lion Invest'}.
                 </p>
               </div>
               <div className="pt-4">
                 <button
                   onClick={handleScrollToOpenAccount}
-                  className="w-full py-4 bg-brand-mint text-brand-bg font-display font-black text-xs tracking-widest rounded transition-all duration-300 hover:shadow-[0_0_25px_rgba(0,225,161,0.4)] hover:bg-white transform hover:-translate-y-0.5 text-center uppercase"
+                  className="w-full py-4 bg-brand-mint text-brand-bg font-display font-black text-xs tracking-widest rounded transition-all duration-300 hover:shadow-[0_0_25px_rgba(var(--brand-glow),0.4)] hover:bg-white transform hover:-translate-y-0.5 text-center uppercase"
                   id="hero-cta-btn"
                 >
                   Tham Gia Ngay
@@ -837,7 +839,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             <div className="pt-2">
               <button
                 onClick={() => setShowToolModal(true)}
-                className="px-6 py-3.5 bg-brand-mint text-brand-bg font-display font-black text-xs sm:text-sm tracking-wider rounded transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,225,161,0.35)] flex items-center space-x-2 border border-transparent hover:border-brand-mint hover:bg-transparent hover:text-brand-mint uppercase"
+                className="px-6 py-3.5 bg-brand-mint text-brand-bg font-display font-black text-xs sm:text-sm tracking-wider rounded transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--brand-glow),0.35)] flex items-center space-x-2 border border-transparent hover:border-brand-mint hover:bg-transparent hover:text-brand-mint uppercase"
               >
                 <Download className="w-5 h-5" />
                 <span>[ Nhận File Excel Miễn Phí Qua Zalo ]</span>
@@ -1074,7 +1076,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
                 THAM GIA CỘNG ĐỒNG
               </h3>
               <p className="text-brand-gray text-xs font-sans font-light leading-relaxed">
-                Gia nhập kênh Discord và Zalo nhóm Lion Invest để nhận tài liệu độc quyền mỗi ngày.
+                Gia nhập kênh Discord và Zalo nhóm {brand.id === 'tiger' ? 'Tiger Invest' : 'Lion Invest'} để nhận tài liệu độc quyền mỗi ngày.
               </p>
             </div>
 
@@ -1096,7 +1098,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
           <div id="open-account-section" className="flex justify-center pt-4">
             <button
               onClick={() => setShowBrokerModal(true)}
-              className="px-8 py-4 bg-brand-mint text-brand-bg font-display font-black text-xs tracking-wider rounded-md transition-all hover:bg-white transform hover:scale-102 uppercase shadow-[0_0_20px_rgba(0,225,161,0.2)]"
+              className="px-8 py-4 bg-brand-mint text-brand-bg font-display font-black text-xs tracking-wider rounded-md transition-all hover:bg-white transform hover:scale-102 uppercase shadow-[0_0_20px_rgba(var(--brand-glow),0.2)]"
             >
               MỞ TÀI KHOẢN NGAY
             </button>
@@ -1292,27 +1294,27 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 8. SUPPORT & COMMUNITY */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-brand-container border border-brand-mint/20 rounded-lg p-6 sm:p-10 text-center space-y-6 shadow-[0_0_30px_rgba(0,225,161,0.02)]">
+        <div className="bg-brand-container border border-brand-mint/20 rounded-lg p-6 sm:p-10 text-center space-y-6 shadow-[0_0_30px_rgba(var(--brand-glow),0.02)]">
           <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
             HỖ TRỢ & CỘNG ĐỒNG
           </h2>
           <p className="text-brand-gray-light text-xs sm:text-sm font-sans max-w-xl mx-auto leading-relaxed">
-            Kết nối trực tiếp với đội ngũ chuyên gia môi giới hỗ trợ 24/7 và gia nhập cộng đồng Trader Lion Invest để nhận các phân tích thị trường cùng tài liệu độc quyền.
+            Kết nối trực tiếp với đội ngũ chuyên gia môi giới hỗ trợ 24/7 và gia nhập cộng đồng Trader {brand.id === 'tiger' ? 'Tiger Invest' : 'Lion Invest'} để nhận các phân tích thị trường cùng tài liệu độc quyền.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4 font-display">
             {/* Hotline Broker */}
             <a
-              href="tel:0563959999"
+              href={`tel:${brand.hotline.replace(/\s+/g, '')}`}
               className="flex items-center space-x-3 bg-brand-surface border border-brand-surface-bright hover:border-brand-mint px-6 py-3.5 rounded text-xs font-black text-brand-mint tracking-wider transition-colors w-full sm:w-auto justify-center"
             >
               <Phone className="w-4 h-4" />
-              <span>HOTLINE BROKER: 056 395 9999</span>
+              <span>HOTLINE BROKER: {brand.hotline}</span>
             </a>
 
             {/* Discord Link */}
             <a
-              href="https://discord.gg/5nMrdAWxE"
+              href={brand.discordLink}
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-3 bg-brand-mint hover:bg-white px-6 py-3.5 rounded text-xs font-black text-brand-bg tracking-wider transition-colors w-full sm:w-auto justify-center"
@@ -1320,7 +1322,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z" />
               </svg>
-              <span>CỘNG ĐỒNG: LION INVEST DISCORD</span>
+              <span>CỘNG ĐỒNG: {brand.id === 'tiger' ? 'TIGER INVEST DISCORD' : 'LION INVEST DISCORD'}</span>
             </a>
           </div>
         </div>
@@ -1391,21 +1393,21 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
                     Đã Bắt Đầu Tải Xuống!
                   </h3>
                   <p className="text-brand-gray text-xs font-sans leading-relaxed">
-                    Tệp tin <strong className="text-white">Nhat_Ky_Giao_Dich_Lion_Invest_Bootcamp.xls</strong> đang được tự động tải về máy của bạn. Vui lòng kiểm tra thư mục tải về.
+                    Tệp tin <strong className="text-white">Nhat_Ky_Giao_Dich_${brand.id === 'tiger' ? 'Tiger' : 'Lion'}_Invest_Bootcamp.xls</strong> đang được tự động tải về máy của bạn. Vui lòng kiểm tra thư mục tải về.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   {/* Join Discord option */}
                   <a
-                    href="https://discord.gg/5nMrdAWxE"
+                    href={brand.discordLink}
                     target="_blank"
                     rel="noreferrer"
                     className="block w-full p-4 bg-brand-mint-bg/20 hover:bg-brand-mint/20 border border-brand-mint/30 hover:border-brand-mint rounded-lg flex items-center justify-between transition-all group"
                   >
                     <div className="text-left space-y-1">
                       <div className="text-xs font-bold text-white uppercase font-display tracking-wider">
-                        Truy cập Discord Lion Invest
+                        Truy cập Discord {brand.id === 'tiger' ? 'Tiger Invest' : 'Lion Invest'}
                       </div>
                       <p className="text-[10px] text-brand-gray-light font-sans font-light">
                         Gia nhập cộng đồng để thảo luận và nhận tài liệu training.

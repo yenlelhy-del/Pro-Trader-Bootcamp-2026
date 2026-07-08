@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { Menu, X, Terminal, Shield, Award, BookOpen, Layers } from 'lucide-react';
+import { Menu, X, Terminal, Shield, Award, BookOpen, Layers, Users } from 'lucide-react';
+import { BrandConfig } from '../brandConfig';
 
 interface HeaderProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onJoinChallenge: () => void;
+  brand: BrandConfig;
 }
 
-export default function Header({ activeTab, setActiveTab, onJoinChallenge }: HeaderProps) {
+export default function Header({ activeTab, setActiveTab, onJoinChallenge, brand }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const showCrm = localStorage.getItem('pro_trader_show_crm') === 'true';
 
   const navItems = [
     { id: 'home', label: 'TRANG CHỦ', icon: Layers },
@@ -17,22 +21,26 @@ export default function Header({ activeTab, setActiveTab, onJoinChallenge }: Hea
     { id: 'rules', label: 'THỂ LỆ & HỎI ĐÁP', icon: BookOpen },
   ];
 
+  if (showCrm) {
+    navItems.push({ id: 'leads', label: 'QUẢN LÝ LEADS', icon: Users });
+  }
+
   return (
     <header className="sticky top-0 z-50 bg-brand-bg/90 backdrop-blur-md border-b border-brand-surface-bright/50">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo */}
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => setActiveTab('home')}>
-            <div className="bg-brand-mint/10 p-2 rounded border border-brand-mint/30">
+          <div className="flex items-center space-x-2.5 cursor-pointer" onClick={() => setActiveTab('home')}>
+            <div className="bg-brand-mint-bg p-2 rounded border border-brand-mint/30">
               <Shield className="w-6 h-6 text-brand-mint" />
             </div>
-            <div>
-              <span className="font-display font-black text-lg tracking-wider text-white">
-                PRO TRADER
+            <div className="flex flex-col">
+              <span className="font-display font-black text-sm sm:text-base tracking-wider text-white uppercase leading-none">
+                {brand.name}
               </span>
-              <span className="font-display font-bold text-lg text-brand-mint ml-1.5">
-                BOOTCAMP 2026
+              <span className="font-display text-[9px] sm:text-[10px] text-brand-mint font-bold uppercase mt-1 leading-none">
+                {brand.subName}
               </span>
             </div>
           </div>

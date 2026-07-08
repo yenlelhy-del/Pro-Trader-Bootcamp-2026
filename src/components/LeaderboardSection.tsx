@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Search, Filter, Award, CheckCircle, XCircle, ArrowUpRight, AwardIcon, TrendingUp, Shield, HelpCircle, Activity } from 'lucide-react';
 import { LeaderboardEntry } from '../types';
 import { INITIAL_LEADERBOARD } from '../data';
+import { BrandConfig } from '../brandConfig';
 
-export default function LeaderboardSection() {
+export default function LeaderboardSection({ brand }: { brand: BrandConfig }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<'All' | 'Voi' | 'Thỏ'>('All');
   const [selectedStatus, setSelectedStatus] = useState<'All' | 'Passed' | 'Active'>('All');
@@ -166,7 +167,7 @@ export default function LeaderboardSection() {
                       <td className="py-4 text-center">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
                           trader.style === 'Voi'
-                            ? 'bg-[#261f0a] text-brand-mint border border-[#3e3415]'
+                            ? 'bg-[#0f231a] text-[#8cd6b2] border border-[#1b4332]'
                             : 'bg-brand-mint-bg text-brand-mint border border-brand-mint/20'
                         }`}>
                           {trader.style === 'Voi' ? '🐘 Voi' : '🐇 Thỏ'}
@@ -235,7 +236,7 @@ export default function LeaderboardSection() {
         
         {/* Style Elephant explanation */}
         <div className="bg-brand-container border border-brand-surface-bright/60 p-5 rounded-lg flex space-x-4 items-start">
-          <div className="p-3 bg-[#261f0a] border border-[#3e3415] text-brand-mint rounded">
+          <div className="p-3 bg-[#0f231a] border border-[#1b4332] text-[#8cd6b2] rounded">
             <Shield className="w-6 h-6" />
           </div>
           <div className="space-y-1.5">
@@ -280,7 +281,7 @@ export default function LeaderboardSection() {
                 <div className="flex items-center space-x-2">
                   <h3 className="font-display font-black text-lg text-white uppercase">{selectedTrader.name}</h3>
                   <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider ${
-                    selectedTrader.style === 'Voi' ? 'bg-[#261f0a] text-brand-mint' : 'bg-brand-mint-bg text-brand-mint'
+                    selectedTrader.style === 'Voi' ? 'bg-[#0f231a] text-[#8cd6b2]' : 'bg-brand-mint-bg text-brand-mint'
                   }`}>
                     {selectedTrader.style === 'Voi' ? 'VOI 🐘' : 'THỎ 🐇'}
                   </span>

@@ -6,21 +6,67 @@
   --font-display: "Be Vietnam Pro", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Custom brand colors matching the Pro Trader Bootcamp gold/yellow guidelines */
-  --color-brand-bg: #0c0b08;
-  --color-brand-container: #14130f;
-  --color-brand-surface: #1a1813;
-  --color-brand-surface-high: #24221c;
-  --color-brand-surface-bright: #353127;
-  --color-brand-mint: #ffd02c;
-  --color-brand-mint-dim: #cca016;
-  --color-brand-mint-bg: #27210c;
+  /* Custom brand colors mapped to CSS variables for dynamic theming */
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-container: var(--brand-container);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-high: var(--brand-surface-high);
+  --color-brand-surface-bright: var(--brand-surface-bright);
+  --color-brand-mint: var(--brand-primary);
+  --color-brand-mint-dim: var(--brand-primary-dim);
+  --color-brand-mint-bg: var(--brand-primary-bg);
   --color-brand-red: #ff4b4b;
   --color-brand-red-bg: #331111;
-  --color-brand-gold: #ffe25e;
-  --color-brand-gold-bg: #2d2a10;
-  --color-brand-gray: #858075;
-  --color-brand-gray-light: #bab5aa;
+  --color-brand-gold: var(--brand-secondary);
+  --color-brand-gold-bg: var(--brand-secondary-bg);
+  --color-brand-gray: #83958a;
+  --color-brand-gray-light: #b9cbbf;
+}
+
+:root {
+  /* Default: Tiger Invest (Xanh mint / Đen) */
+  --brand-bg: #050505;
+  --brand-container: #0d0d0d;
+  --brand-surface: #121212;
+  --brand-surface-high: #1a1a1a;
+  --brand-surface-bright: #242424;
+  
+  --brand-primary: #00e1a1;
+  --brand-primary-dim: #00be88;
+  --brand-primary-bg: #042d20;
+  
+  --brand-secondary: #ffe25e;
+  --brand-secondary-bg: #2d2a10;
+  
+  --brand-glow: 0, 225, 161; /* Mint RGB */
+}
+
+.theme-lion {
+  /* Lion Finpeace (Vàng / Xanh đen) */
+  --brand-bg: #0c1511;
+  --brand-container: #141d19;
+  --brand-surface: #18221d;
+  --brand-surface-high: #232c27;
+  --brand-surface-bright: #323b36;
+  
+  --brand-primary: #ffe25e; /* Override mint primary to gold */
+  --brand-primary-dim: #ebd052;
+  --brand-primary-bg: #2d2a10;
+  
+  --brand-secondary: #ffe25e;
+  --brand-secondary-bg: #2d2a10;
+  
+  --brand-glow: 255, 226, 94; /* Gold RGB */
+
+  /* Re-declare Tailwind color variable mappings to evaluate them under .theme-lion scope */
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-container: var(--brand-container);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-high: var(--brand-surface-high);
+  --color-brand-surface-bright: var(--brand-surface-bright);
+  --color-brand-mint: var(--brand-primary);
+  --color-brand-mint-dim: var(--brand-primary-dim);
+  --color-brand-mint-bg: var(--brand-primary-bg);
 }
 
 body {
@@ -28,6 +74,7 @@ body {
   color: #dbe5de;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease;
 }
 
 /* Custom scrollbar matching the terminal design */
@@ -36,22 +83,22 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0c1511;
+  background: var(--color-brand-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #232c27;
+  background: var(--color-brand-surface-high);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #323b36;
+  background: var(--color-brand-surface-bright);
 }
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(0, 225, 161, 0.2);
+    box-shadow: 0 0 5px rgba(var(--brand-glow), 0.2);
   }
   50% {
-    box-shadow: 0 0 15px rgba(0, 225, 161, 0.6);
+    box-shadow: 0 0 15px rgba(var(--brand-glow), 0.6);
   }
 }
 
@@ -59,23 +106,34 @@ body {
   animation: pulse-glow 2s infinite;
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+/* Custom utility overrides for Lion theme to convert hardcoded greens to yellow/gold */
+.theme-lion .bg-\[\#042d20\] {
+  background-color: var(--brand-primary-bg) !important;
+}
+.theme-lion .bg-\[\#03150e\] {
+  background-color: var(--brand-primary-bg) !important;
+}
+.theme-lion .bg-\[\#1c3227\] {
+  background-color: var(--brand-primary-bg) !important;
+}
+.theme-lion .bg-\[\#121c17\] {
+  background-color: var(--brand-primary-bg) !important;
+}
+.theme-lion .bg-\[\#0c1612\] {
+  background-color: var(--brand-container) !important;
+}
+.theme-lion .border-t-\[\#0c1612\] {
+  border-top-color: var(--brand-container) !important;
+}
+.theme-lion .text-\[\#a7f2cd\] {
+  color: var(--brand-primary-dim) !important;
+}
+.theme-lion .text-\[\#a7f2cd\]\/95 {
+  color: var(--brand-primary-dim) !important;
+}
+.theme-lion .via-\[\#a7f2cd\] {
+  --tw-gradient-via: var(--brand-primary-dim) !important;
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 30s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
 
 

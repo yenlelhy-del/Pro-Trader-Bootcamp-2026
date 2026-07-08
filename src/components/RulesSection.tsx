@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronDown, ChevronUp, BookOpen, Shield, TrendingUp, Award, CheckCircle2, ListFilter } from 'lucide-react';
+import { HelpCircle, ChevronDown, ChevronUp, BookOpen, Shield, TrendingUp, Award } from 'lucide-react';
 import { INITIAL_FAQS } from '../data';
-import { FAQItem } from '../types';
+import { BrandConfig } from '../brandConfig';
 
-export default function RulesSection() {
+interface RulesSectionProps {
+  brand: BrandConfig;
+}
+
+export default function RulesSection({ brand }: RulesSectionProps) {
   const [activeFaqId, setActiveFaqId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<'All' | 'thể_lệ' | 'quản_trị' | 'kỹ_thuật'>('All');
 
@@ -83,7 +87,7 @@ export default function RulesSection() {
             Tránh trường hợp ăn may 'all-in' vào một mã cổ phiếu đột biến. Lợi nhuận kiếm được từ một mã đơn lẻ không được chiếm quá 40% trong tổng chỉ tiêu thăng hạng 5% NAV. Đồng thời chỉ giao dịch rổ VN100 có thanh khoản an toàn.
           </p>
           <div className="bg-brand-surface p-3.5 rounded border border-brand-surface-bright/50 text-[11px] font-mono leading-relaxed text-brand-gray-light">
-            <span className="text-brand-mint font-bold uppercase block mb-1">Quy định nhất quán:</span>
+            <span className="text-[#8cd6b2] font-bold uppercase block mb-1">Quy định nhất quán:</span>
             <span>Mục tiêu lãi thăng hạng là 2.5M VND. Không có bất kỳ giao dịch một mã đơn lẻ nào được mang lại quá 1M VND lợi nhuận tính vào tổng điểm.</span>
           </div>
         </div>
@@ -155,7 +159,7 @@ export default function RulesSection() {
 
                   {/* Expandable answers */}
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-brand-gray-light font-sans leading-relaxed border-t border-brand-surface-bright/30 bg-[#13120e]">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-brand-gray-light font-sans leading-relaxed border-t border-brand-surface-bright/30 bg-[#0e1713]">
                       {faq.answer}
                     </div>
                   )}
