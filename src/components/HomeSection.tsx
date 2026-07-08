@@ -15,7 +15,7 @@ interface HomeSectionProps {
 export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSectionProps) {
   // Calculator state
   const [capital, setCapital] = useState<number>(50000000); // 50 million VND default
-  
+
   // Registration Form state
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -64,7 +64,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !phoneNumber) return;
-    
+
     setIsSubmitted(true);
     setSubmittedName(fullName);
     onRegisterSuccess(fullName, phoneNumber, brokerCode);
@@ -101,11 +101,11 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
   return (
     <div className="space-y-20 pb-12 animate-fade-in">
-      
+
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 md:pt-16 pb-12">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* Left Text */}
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center space-x-2 bg-brand-mint-bg border border-brand-mint/40 px-3.5 py-1.5 rounded-full">
@@ -127,22 +127,37 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               Chứng minh năng lực quản trị rủi ro để nhận đặc quyền hạn mức giao dịch lớn và giữ lại tới 80% lợi nhuận trong môi trường chuyên nghiệp nhất.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 border border-brand-surface-bright rounded-lg overflow-hidden max-w-2xl bg-brand-container/50 font-display">
-              <div className="p-4 border-b sm:border-b-0 sm:border-r border-brand-surface-bright flex flex-col justify-center space-y-1 text-left">
-                <span className="text-[9px] uppercase tracking-widest text-brand-mint font-black">
-                  Khai mạc & Kick-off Vòng 1
-                </span>
-                <span className="text-xl font-mono font-black text-white">
-                  20.07.2026
+            <div className="border border-brand-surface-bright rounded-lg p-6 bg-[#161410] max-w-2xl font-display space-y-5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+              <div className="flex items-center justify-between border-b border-brand-surface-bright pb-3">
+                <h4 className="text-[10px] sm:text-xs font-black tracking-widest text-[#ffe58f] uppercase">
+                  Lịch Trình Bootcamp 2026
+                </h4>
+                <span className="text-[9px] px-2 py-0.5 rounded bg-brand-mint/10 text-brand-mint border border-brand-mint/20 uppercase font-black tracking-wider">
+                  Sắp Bắt Đầu
                 </span>
               </div>
-              <div className="p-4 flex flex-col justify-center space-y-1 text-left">
-                <span className="text-[9px] uppercase tracking-widest text-[#ffe58f] font-black">
-                  Ưu đãi đăng ký sớm
-                </span>
-                <p className="text-brand-gray-light text-[10px] sm:text-[11px] leading-relaxed font-sans font-normal">
-                  Đăng ký ngay hôm nay để bắt đầu nhận tài liệu training thực chiến từ ban tổ chức.
-                </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Mốc 1 */}
+                <div className="relative pl-5 border-l border-brand-surface-bright/50 space-y-1 text-left">
+                  <div className="absolute -left-1 top-1 w-2 h-2 rounded-full bg-brand-surface-bright border border-brand-bg" />
+                  <div className="text-[9px] text-brand-gray uppercase tracking-widest font-black">Mốc 1: Đăng ký sớm</div>
+                  <p className="text-brand-gray-light text-xs leading-relaxed font-sans font-light">
+                    Đăng ký ngay hôm nay để bắt đầu nhận tài liệu training thực chiến độc quyền.
+                  </p>
+                </div>
+
+                {/* Mốc 2 */}
+                <div className="relative pl-5 border-l border-brand-mint space-y-1.5 text-left">
+                  <div className="absolute -left-1 top-1.5 w-2 h-2 rounded-full bg-brand-mint border border-brand-bg shadow-[0_0_8px_rgba(0,225,161,0.6)] animate-pulse" />
+                  <div className="text-[9px] text-brand-mint uppercase tracking-widest font-black">Mốc 2: Kick-off Vòng 1</div>
+                  <div className="text-3xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-brand-mint leading-none">
+                    20.07.2026
+                  </div>
+                  <p className="text-[11px] text-brand-gray-light font-sans font-light">
+                    Bắt đầu giao dịch thực chiến tranh tài kỷ luật.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -244,7 +259,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       {/* 2. THREE PRINCIPLES */}
       <section className="bg-brand-container/50 border-y border-brand-surface-bright/35 py-16">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
+
           <div className="text-center space-y-3">
             <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase">
               3 NGUYÊN TẮC VÀNG TẠI BOOTCAMP
@@ -255,7 +270,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
+
             {/* Card 1 */}
             <div className="bg-brand-surface border border-brand-surface-bright hover:border-brand-mint/50 p-6 rounded-lg transition-all duration-300 flex flex-col space-y-4 group">
               <div className="bg-brand-mint-bg w-12 h-12 rounded flex items-center justify-center border border-brand-mint/20 group-hover:border-brand-mint/40 transition-colors">
@@ -303,7 +318,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 3. TRADER ROADMAP */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
+
         <div className="text-center space-y-3">
           <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase">
             LỘ TRÌNH THĂNG TIẾN TRADER
@@ -314,7 +329,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
+
           {/* Phase 1: Vong 1 */}
           <div className="bg-brand-container border border-brand-surface-bright rounded-lg p-6 sm:p-8 space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-brand-surface-bright/30 border-b border-l border-brand-surface-bright px-4 py-1 rounded-bl text-[10px] font-bold text-brand-gray uppercase tracking-widest font-display">
@@ -359,7 +374,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             {/* Rules checklist */}
             <div className="space-y-3 font-display text-xs">
               <div className="text-[10px] uppercase tracking-wider text-brand-gray font-black">QUY TẮC GIAO DỊCH BẮT BUỘC:</div>
-              
+
               <div className="flex justify-between items-center py-2 border-b border-brand-surface-bright/30">
                 <div className="flex items-center space-x-1.5">
                   <span className="text-brand-gray-light">Giới hạn sụt giảm ngày</span>
@@ -491,7 +506,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
                 <span>QUY TẮC GIAO DỊCH BẮT BUỘC:</span>
                 <span className="text-brand-mint font-mono font-bold">REVIEW 2 THÁNG/LẦN</span>
               </div>
-              
+
               <div className="flex justify-between items-center py-2 border-b border-brand-surface-bright/30">
                 <div className="flex items-center space-x-1.5">
                   <span className="text-brand-gray-light">Giới hạn sụt giảm ngày</span>
@@ -587,7 +602,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       {/* 4. PROPRIETARY RISK TOOL */}
       <section className="bg-brand-container/30 border-y border-brand-surface-bright/30 py-16">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* Left Visual Tool Mock */}
           <div className="lg:col-span-5 relative order-2 lg:order-1">
             <div className="relative z-10 rounded-lg overflow-hidden border border-brand-surface-bright shadow-[0_0_30px_rgba(0,0,0,0.5)]">
@@ -631,7 +646,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 5. INTERACTIVE SLIDER RISK CALCULATOR */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
+
         <div className="text-center space-y-3">
           <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase">
             MÁY TÍNH HẠN MỨC GIAO DỊCH & RỦI RO
@@ -642,7 +657,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
         </div>
 
         <div className="bg-brand-container border border-brand-surface-bright rounded-lg p-6 sm:p-8 space-y-8">
-          
+
           {/* Slider input */}
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -681,7 +696,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
           {/* Calculator Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            
+
             {/* Left Info: How it works */}
             <div className="lg:col-span-5 bg-brand-surface/50 border border-brand-surface-bright p-6 rounded-lg flex flex-col justify-between">
               <div className="space-y-4">
@@ -718,7 +733,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
+
                 {/* Stat 1 */}
                 <div className="bg-[#1a1813] border border-brand-surface-bright/50 p-4 rounded flex flex-col justify-between">
                   <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider font-display block">
@@ -794,7 +809,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
       {/* 6. HOW TO START */}
       <section className="bg-brand-container border-y border-brand-surface-bright/30 py-16">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
+
           <div className="text-center space-y-3">
             <h2 className="font-display font-black text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase">
               CÁC BƯỚC ĐỂ BẮT ĐẦU
@@ -805,7 +820,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            
+
             {/* Step 1 */}
             <div className="bg-brand-surface border border-brand-surface-bright p-5 rounded-lg flex flex-col items-center text-center space-y-4 relative">
               <div className="bg-brand-surface-bright border border-brand-mint/30 w-10 h-10 rounded-full flex items-center justify-center font-mono font-black text-brand-mint text-sm">
@@ -888,7 +903,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 7. REGISTRATION & BENEFITS */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" id="registration-section">
-        
+
         {/* Left Column: Benefits checklist */}
         <div className="lg:col-span-6 space-y-8">
           <div className="space-y-4">
@@ -904,7 +919,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
           {/* Stepper details */}
           <div className="space-y-6">
-            
+
             <div className="flex items-start space-x-4">
               <div className="flex-shrink-0 bg-brand-mint/10 border border-brand-mint/30 w-10 h-10 rounded-full flex items-center justify-center font-mono text-brand-mint text-sm font-black">
                 1
@@ -958,7 +973,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
         {/* Right Column: Registration Form */}
         <div className="lg:col-span-6 bg-brand-container border border-brand-surface-bright p-6 sm:p-8 rounded-lg space-y-6 relative">
-          
+
           <div className="text-center space-y-2">
             <h3 className="font-display font-black text-xl text-white uppercase">
               ĐƠN ĐĂNG KÝ THAM GIA
@@ -1001,7 +1016,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             </div>
           ) : (
             <form onSubmit={handleRegisterSubmit} className="space-y-5">
-              
+
               <div className="space-y-2">
                 <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-widest font-display">
                   Họ và tên *
@@ -1098,7 +1113,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               className="flex items-center space-x-3 bg-brand-mint hover:bg-white px-6 py-3.5 rounded text-xs font-black text-brand-bg tracking-wider transition-colors w-full sm:w-auto justify-center"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z" />
               </svg>
               <span>CỘNG ĐỒNG: LION INVEST DISCORD</span>
             </a>
@@ -1112,7 +1127,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={() => setShowToolModal(false)} />
           <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-md w-full relative z-10 space-y-6">
-            
+
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
                 <Download className="w-6 h-6" />
@@ -1168,7 +1183,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={() => setShowBrokerModal(false)} />
           <div className="bg-brand-container border border-brand-mint/30 rounded-lg p-6 max-w-lg w-full relative z-10 space-y-6 max-h-[90vh] overflow-y-auto">
-            
+
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-brand-mint/10 border border-brand-mint/20 rounded-full flex items-center justify-center mx-auto text-brand-mint">
                 <CheckCircle className="w-6 h-6" />
@@ -1182,7 +1197,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
             </div>
 
             <div className="space-y-4 animate-fade-in">
-              
+
               {/* Sub-broker Selection Cards */}
               <div className="space-y-1.5">
                 <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-wider font-display">
@@ -1194,11 +1209,10 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
                       key={idx}
                       type="button"
                       onClick={() => setSelectedKbsvBroker(idx)}
-                      className={`py-2.5 px-1 text-[10px] font-bold font-display rounded border text-center transition-all leading-tight ${
-                        selectedKbsvBroker === idx
+                      className={`py-2.5 px-1 text-[10px] font-bold font-display rounded border text-center transition-all leading-tight ${selectedKbsvBroker === idx
                           ? 'bg-brand-mint-bg text-brand-mint border-brand-mint shadow-[0_0_8px_rgba(255,208,44,0.15)]'
                           : 'bg-brand-surface border-brand-surface-bright text-brand-gray-light hover:text-white'
-                      }`}
+                        }`}
                     >
                       <div>{broker.name}</div>
                       <div className="font-mono text-[8px] text-brand-gray mt-0.5">ID: {broker.id}</div>
