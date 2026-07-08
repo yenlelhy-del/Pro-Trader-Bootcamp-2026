@@ -887,7 +887,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 onChange={(e) => setCapital(Number(e.target.value))}
                 className="w-full h-2 bg-brand-surface-bright rounded-lg appearance-none cursor-pointer accent-brand-mint focus:outline-none"
                 style={{
-                  background: `linear-gradient(to right, ${brand.id === 'lion' ? '#00e1a1' : '#ffd02c'} 0%, ${brand.id === 'lion' ? '#00e1a1' : '#ffd02c'} ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 100%)`
+                  background: `linear-gradient(to right, ${brand.id === 'tiger' ? '#ffd02c' : '#00e1a1'} 0%, ${brand.id === 'tiger' ? '#ffd02c' : '#00e1a1'} ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 ${((capital - 10000000) / (500000000 - 10000000)) * 100}%, #353127 100%)`
                 }}
               />
               <div className="flex justify-between text-[10px] text-brand-gray font-mono mt-2">
