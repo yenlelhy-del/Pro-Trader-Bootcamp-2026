@@ -1,0 +1,6 @@
+{
+  "name": "Pro Trader Bootcamp",
+  "description": "Trang thông tin và quản trị rủi ro độc quyền của Pro Trader Bootcamp 2026 với máy tính rủi ro kỷ luật và bảng điều khiển mô phỏng thực chiến.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

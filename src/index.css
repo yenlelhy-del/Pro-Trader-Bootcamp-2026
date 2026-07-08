@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Be Vietnam Pro", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom brand colors matching the Pro Trader Bootcamp gold/yellow guidelines */
+  --color-brand-bg: #0c0b08;
+  --color-brand-container: #14130f;
+  --color-brand-surface: #1a1813;
+  --color-brand-surface-high: #24221c;
+  --color-brand-surface-bright: #353127;
+  --color-brand-mint: #ffd02c;
+  --color-brand-mint-dim: #cca016;
+  --color-brand-mint-bg: #27210c;
+  --color-brand-red: #ff4b4b;
+  --color-brand-red-bg: #331111;
+  --color-brand-gold: #ffe25e;
+  --color-brand-gold-bg: #2d2a10;
+  --color-brand-gray: #858075;
+  --color-brand-gray-light: #bab5aa;
+}
+
+body {
+  background-color: var(--color-brand-bg);
+  color: #dbe5de;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar matching the terminal design */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0c1511;
+}
+::-webkit-scrollbar-thumb {
+  background: #232c27;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #323b36;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 225, 161, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 225, 161, 0.6);
+  }
+}
+
+.glow-mint {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+
