@@ -104,10 +104,10 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
 
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-8 md:pt-16 pb-12">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
           {/* Left Text */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center space-x-2 bg-brand-mint-bg border border-brand-mint/40 px-3.5 py-1.5 rounded-full">
               <span className="w-2 h-2 rounded-full bg-brand-mint animate-ping" />
               <span className="font-display text-[10px] sm:text-xs font-black tracking-widest text-brand-mint uppercase">
@@ -127,7 +127,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
               Chứng minh năng lực quản trị rủi ro để nhận đặc quyền hạn mức giao dịch lớn và giữ lại tới 80% lợi nhuận trong môi trường chuyên nghiệp nhất.
             </p>
 
-            <div className="border border-brand-surface-bright rounded-lg p-6 bg-[#161410] max-w-2xl font-display space-y-5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <div className="border border-brand-surface-bright rounded-lg p-5 bg-[#161410] max-w-2xl font-display space-y-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
               <div className="flex items-center justify-between border-b border-brand-surface-bright pb-3">
                 <h4 className="text-[10px] sm:text-xs font-black tracking-widest text-[#ffe58f] uppercase">
                   Lịch Trình Bootcamp 2026
@@ -173,7 +173,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab }: HomeSec
           </div>
 
           {/* Right Image Display */}
-          <div className="lg:col-span-5 relative mt-8 lg:mt-0">
+          <div className="lg:col-span-6 relative mt-8 lg:mt-0">
             <div className="relative z-10 rounded-lg overflow-hidden border border-brand-surface-bright/80 shadow-[0_0_50px_rgba(4,45,32,0.6)]">
               <img
                 src={cyberMascotsImg}
