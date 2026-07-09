@@ -15,8 +15,8 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
   const [ticker, setTicker] = useState('');
   const [action, setAction] = useState<'BUY' | 'SELL'>('BUY');
   const [quantity, setQuantity] = useState<number>(100);
-  const [entryPrice, setEntryPrice] = useState<number>(50.0);
-  const [exitPrice, setExitPrice] = useState<number>(53.0);
+  const [entryPrice, setEntryPrice] = useState<string | number>(50.0);
+  const [exitPrice, setExitPrice] = useState<string | number>(53.0);
   const [weight, setWeight] = useState<number>(20); // default 20% NAV allocation
   const [comment, setComment] = useState('');
 
@@ -129,7 +129,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
 
     // Calculate profit
     const multiplier = action === 'BUY' ? 1 : -1;
-    const profit = quantity * (exitPrice - entryPrice) * 1000 * multiplier;
+    const profit = quantity * (Number(exitPrice) - Number(entryPrice)) * 1000 * multiplier;
 
     const newTrade: TradeLog = {
       id: 't_' + Date.now(),
@@ -137,7 +137,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
       ticker: ticker.toUpperCase(),
       action,
       quantity,
-      price: entryPrice,
+      price: Number(entryPrice),
       profit,
       drawdownPercentage: profit < 0 ? (Math.abs(profit) / stats.peakBalance) * 100 : 0,
       comment: comment || 'Ghi nhận thủ công từ mô phỏng.',
@@ -671,9 +671,8 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                   type="number"
                   required
                   step="any"
-                  min={0.1}
                   value={entryPrice}
-                  onChange={(e) => setEntryPrice(Math.max(0.1, Number(e.target.value)))}
+                  onChange={(e) => setEntryPrice(e.target.value)}
                   className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
                 />
               </div>
@@ -686,9 +685,8 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                   type="number"
                   required
                   step="any"
-                  min={0.1}
                   value={exitPrice}
-                  onChange={(e) => setExitPrice(Math.max(0.1, Number(e.target.value)))}
+                  onChange={(e) => setExitPrice(e.target.value)}
                   className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
                 />
               </div>
