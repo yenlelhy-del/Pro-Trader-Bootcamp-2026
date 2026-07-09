@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Terminal, Plus, Trash2, CheckCircle, AlertTriangle, Play, HelpCircle, Activity, RotateCcw } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Terminal, Plus, Trash2, CheckCircle, AlertTriangle, Play, HelpCircle, Activity, RotateCcw, Download } from 'lucide-react';
 import { TradeLog, AccountState } from '../types';
-import { INITIAL_TRADE_LOGS } from '../data';
 import { BrandConfig } from '../brandConfig';
+
+const STORAGE_KEY = 'protrader_trade_logs';
 
 // Mock list of compliant VN100 tickers for the compliance validator
 const COMPLIANT_TICKERS = ['FPT', 'TCB', 'HPG', 'VNM', 'MWG', 'SSI', 'VND', 'MSN', 'VHM', 'VIC', 'ACB', 'MBB', 'VPB', 'STB', 'GAS', 'CTG', 'HDB', 'VRE', 'TPB'];
 
 export default function DashboardSection({ brand }: { brand: BrandConfig }) {
   const [initialCapital, setInitialCapital] = useState<number>(30000000); // 30,000,000 VND (Vòng 1) default
-  const [tradeLogs, setTradeLogs] = useState<TradeLog[]>(INITIAL_TRADE_LOGS);
+
+  // Load from localStorage on first mount, start blank if nothing stored
+  const [tradeLogs, setTradeLogs] = useState<TradeLog[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   
   // Form inputs state
   const [ticker, setTicker] = useState('');
@@ -19,6 +29,15 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
   const [exitPrice, setExitPrice] = useState<string | number>(53.0);
   const [weight, setWeight] = useState<number>(20); // default 20% NAV allocation
   const [comment, setComment] = useState('');
+
+  // Persist tradeLogs to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tradeLogs));
+    } catch {
+      // storage quota exceeded or unavailable
+    }
+  }, [tradeLogs]);
 
   // Selected trade index for chart tooltip
   const [hoveredTradeIdx, setHoveredTradeIdx] = useState<number | null>(null);
@@ -146,8 +165,13 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
 
     setTradeLogs([...tradeLogs, newTrade]);
 
-    // Reset inputs
+    // Reset all inputs to blank
     setTicker('');
+    setAction('BUY');
+    setQuantity(100);
+    setEntryPrice('');
+    setExitPrice('');
+    setWeight(20);
     setComment('');
   };
 
@@ -156,10 +180,39 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
   };
 
   const handleResetTerminal = () => {
-    if (window.confirm('Bạn có chắc chắn muốn cài đặt lại toàn bộ nhật ký giao dịch về mặc định không?')) {
-      setTradeLogs(INITIAL_TRADE_LOGS);
+    if (window.confirm('Bạn có chắc chắn muốn XÓA TOÀN BỘ nhật ký giao dịch không? Hành động này không thể hoàn tác.')) {
+      setTradeLogs([]);
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
     }
   };
+
+  // Export journal as CSV file
+  const handleExportCSV = useCallback(() => {
+    if (tradeLogs.length === 0) {
+      alert('Nhật ký giao dịch đang trống, không có dữ liệu để xuất.');
+      return;
+    }
+    const headers = ['Thời Gian', 'Mã CK', 'Lệnh', 'Khối Lượng', 'Giá Entry (x1000đ)', 'Giá Exit (x1000đ)', 'Lợi Nhuận (đ)', 'Tỷ Trọng (%)', 'Nhận Xét'];
+    const rows = tradeLogs.map(t => [
+      t.timestamp,
+      t.ticker,
+      t.action,
+      t.quantity,
+      t.price,
+      (t as any).exitPrice ?? '',
+      t.profit,
+      t.weightPercentage ?? '',
+      `"${(t.comment || '').replace(/"/g, '""')}"`
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nhat-ky-giao-dich-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [tradeLogs]);
 
   // Build the coordinates for our custom high-fidelity SVG chart
   const buildSvgPath = (width: number, height: number) => {
@@ -722,9 +775,27 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
             <div className="font-display font-bold text-xs uppercase text-brand-gray-light tracking-wider">
               Nhật Ký Khớp Lệnh Lũy Kế
             </div>
-            <span className="font-mono text-[10px] text-brand-gray">
-              TỔNG SỐ LỆNH: {tradeLogs.length}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] text-brand-gray">
+                TỔNG SỐ LỆNH: {tradeLogs.length}
+              </span>
+              <button
+                onClick={handleExportCSV}
+                title="Tải về file CSV"
+                className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-surface border border-brand-surface-bright text-brand-gray-light hover:text-brand-mint hover:border-brand-mint transition-colors"
+              >
+                <Download className="w-3 h-3" />
+                Tải CSV
+              </button>
+              <button
+                onClick={handleResetTerminal}
+                title="Xóa toàn bộ nhật ký"
+                className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-surface border border-brand-surface-bright text-brand-gray hover:text-brand-red hover:border-brand-red transition-colors"
+              >
+                <Trash2 className="w-3 h-3" />
+                Xóa Tất Cả
+              </button>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
