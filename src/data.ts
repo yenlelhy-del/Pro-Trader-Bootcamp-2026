@@ -167,7 +167,7 @@ export const INITIAL_TRADE_LOGS: TradeLog[] = [
 export const INITIAL_FAQS: FAQItem[] = [
   {
     id: "faq1",
-    question: "Số tiền nạp tối thiểu 30 triệu VND là gì?",
+    question: "Số tiền nạp tối thiểu 10 triệu VND là gì?",
     answer: "Đây là điều kiện cần tối thiểu để bắt đầu tham gia Chặng 1 (Thử thách kỷ luật). Số tiền này nạp vào tài khoản cá nhân của chính bạn tại Công ty Chứng khoán (CTCK) chỉ định. Bạn giữ toàn quyền sở hữu và rút tiền, không phải đóng phí cho Bootcamp. Mục đích là để đảm bảo tính thực tế và cam kết kỷ luật giao dịch.",
     category: "thể_lệ"
   },
@@ -192,13 +192,13 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: "faq5",
     question: "Làm thế nào để thăng hạng từ Vòng 1 lên Vòng 2?",
-    answer: "Bạn cần giao dịch tối thiểu trong 2 tháng, đạt mục tiêu lãi lũy kế ≥ 5% NAV, và TUYỆT ĐỐI không vi phạm bất kỳ quy tắc quản trị rủi ro nào (Sụt giảm ngày, Sụt giảm tổng, Đa dạng hóa, Tính nhất quán và Bộ lọc thanh khoản VN100). Khi hoàn thành, bạn sẽ được thăng hạng lên Vòng 2 và nhận hạn mức giao dịch x10 lần vốn.",
+    answer: "Bạn cần giao dịch tối thiểu trong 2 tháng, đạt mục tiêu lãi lũy kế ≥ 5% NAV, và TUYỆT ĐỐI không vi phạm bất kỳ quy tắc quản trị rủi ro nào (Sụt giảm ngày, Sụt giảm tổng, Đa dạng hóa, Tính nhất quán và Bộ lọc thanh khoản VN100). Khi hoàn thành, bạn sẽ được thăng hạng lên Vòng 2 và nhận hạn mức giao dịch 100 triệu VND.",
     category: "thể_lệ"
   },
   {
     id: "faq6",
     question: "Cơ chế chia sẻ lợi nhuận 80% hoạt động ra sao?",
-    answer: "Ở Vòng 2 (Tăng trưởng chuyên nghiệp), bạn được cấp hạn mức giao dịch gấp 10 lần vốn tự có. Lợi nhuận phát sinh từ hạn mức giao dịch này sẽ được chia sẻ theo tỷ lệ: Bạn nhận 80% lợi nhuận (áp dụng giới hạn chia thưởng cho Top 10 Performance tốt nhất), 20% còn lại giữ làm quỹ vận hành. Lợi nhuận được đối soát và giải ngân dựa trên kết quả review định kỳ 2 tháng một lần.",
+    answer: "Ở Vòng 2 (Tăng trưởng chuyên nghiệp), bạn được cấp hạn mức giao dịch cố định 100 triệu VND. Lợi nhuận phát sinh từ hạn mức giao dịch này sẽ được chia sẻ theo tỷ lệ: Bạn nhận 80% lợi nhuận (lãi), 20% còn lại giữ làm quỹ vận hành. Lợi nhuận được đối soát và giải ngân dựa trên kết quả review định kỳ 2 tháng một lần.",
     category: "thể_lệ"
   },
   {

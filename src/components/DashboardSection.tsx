@@ -2,49 +2,89 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Terminal, Plus, Trash2, CheckCircle, AlertTriangle, Play, HelpCircle, Activity, RotateCcw, Download } from 'lucide-react';
 import { TradeLog, AccountState } from '../types';
 import { BrandConfig } from '../brandConfig';
+import { doc, setDoc, deleteDoc, collection, onSnapshot, writeBatch } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const STORAGE_KEY = 'protrader_trade_logs';
 
 // Mock list of compliant VN100 tickers for the compliance validator
 const COMPLIANT_TICKERS = ['FPT', 'TCB', 'HPG', 'VNM', 'MWG', 'SSI', 'VND', 'MSN', 'VHM', 'VIC', 'ACB', 'MBB', 'VPB', 'STB', 'GAS', 'CTG', 'HDB', 'VRE', 'TPB'];
 
-export default function DashboardSection({ brand }: { brand: BrandConfig }) {
-  const [initialCapital, setInitialCapital] = useState<number>(30000000); // 30,000,000 VND (Vòng 1) default
+export default function DashboardSection({ 
+  brand, 
+  currentUser, 
+  onTriggerLogin 
+}: { 
+  brand: BrandConfig; 
+  currentUser: any; 
+  onTriggerLogin: () => void; 
+}) {
+  const [initialCapital, setInitialCapital] = useState<number>(10000000); // 10,000,000 VND (Vòng 1/2) default
+  const [activeRound, setActiveRound] = useState<'vong1' | 'vong2'>('vong1');
 
-  // Load from localStorage on first mount, start blank if nothing stored
-  const [tradeLogs, setTradeLogs] = useState<TradeLog[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
+  // Load from localStorage or Firestore
+  const [tradeLogs, setTradeLogs] = useState<TradeLog[]>([]);
+
+  // Load and subscribe to tradeLogs
+  useEffect(() => {
+    if (!currentUser) {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        setTradeLogs(saved ? JSON.parse(saved) : []);
+      } catch {
+        setTradeLogs([]);
+      }
+      return;
     }
-  });
+
+    const logsRef = collection(db, 'users', currentUser.uid, 'tradeLogs');
+    const unsubscribe = onSnapshot(logsRef, (snapshot) => {
+      const fetchedLogs: TradeLog[] = [];
+      snapshot.forEach((docSnap) => {
+        fetchedLogs.push(docSnap.data() as TradeLog);
+      });
+      fetchedLogs.sort((a, b) => a.id.localeCompare(b.id));
+      setTradeLogs(fetchedLogs);
+    }, (error) => {
+      console.error("Firestore loading error:", error);
+    });
+
+    return () => unsubscribe();
+  }, [currentUser]);
+
+  // Persist tradeLogs to localStorage whenever they change (guest mode only)
+  useEffect(() => {
+    if (currentUser) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tradeLogs));
+    } catch {
+      // storage quota exceeded or unavailable
+    }
+  }, [tradeLogs, currentUser]);
+
+  const closedTrades = tradeLogs.filter(t => t.status === 'CLOSED');
   
   // Form inputs state
   const [ticker, setTicker] = useState('');
   const [action, setAction] = useState<'BUY' | 'SELL'>('BUY');
   const [quantity, setQuantity] = useState<number>(100);
   const [entryPrice, setEntryPrice] = useState<string | number>(50.0);
-  const [exitPrice, setExitPrice] = useState<string | number>(53.0);
   const [weight, setWeight] = useState<number>(20); // default 20% NAV allocation
   const [comment, setComment] = useState('');
 
-  // Persist tradeLogs to localStorage whenever they change
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tradeLogs));
-    } catch {
-      // storage quota exceeded or unavailable
-    }
-  }, [tradeLogs]);
+  // Real-time position closing state
+  const [closingTradeId, setClosingTradeId] = useState<string | null>(null);
+  const [exitPriceInput, setExitPriceInput] = useState<string>('');
 
   // Selected trade index for chart tooltip
   const [hoveredTradeIdx, setHoveredTradeIdx] = useState<number | null>(null);
 
+  // Dynamic computed state for trades
+  const [computedTradeStates, setComputedTradeStates] = useState<Record<string, { realizedProfit: number; isClosed: boolean; matchedPrice?: number; remainingQty: number }>>({});
+
   // Stats and Compliance state calculated dynamically
   const [stats, setStats] = useState<AccountState>({
-    initialBalance: initialCapital,
+    initialBalance: 10000000,
     currentBalance: initialCapital,
     peakBalance: initialCapital,
     totalTrades: 0,
@@ -77,43 +117,119 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
     // Target profit for passing (5% of initial)
     const targetProfit = initialCapital * 0.05;
 
-    // Run chronological recalculation of equity curve
+    // Chronological recalculation loop
+    const buyQueues: Record<string, { id: string; price: number; quantity: number; weight: number; originalQuantity: number }[]> = {};
+    const activeWeights: Record<string, number> = {};
+    
+    // We will keep a map from trade ID to its computed state
+    const computedStates: Record<string, {
+      realizedProfit: number;
+      isClosed: boolean;
+      matchedPrice?: number;
+      remainingQty: number;
+    }> = {};
+
+    // Initialize all trade states
     tradeLogs.forEach((trade) => {
-      balance += trade.profit;
+      computedStates[trade.id] = {
+        realizedProfit: 0,
+        isClosed: trade.action === 'SELL',
+        remainingQty: trade.quantity,
+      };
+    });
+
+    tradeLogs.forEach((trade) => {
+      const ticker = trade.ticker.toUpperCase();
       
-      if (balance > peak) {
-        peak = balance;
-      }
-      
-      const currentDD = ((peak - balance) / peak) * 100;
-      if (currentDD > maxDD) {
-        maxDD = currentDD;
-      }
-
-      if (trade.profit > 0) {
-        winCount++;
-      }
-
-      // 1. Check Max Daily Drawdown rule: single day/trade loss shouldn't exceed 4% of current peak NAV
-      const tradeDDPercentage = (Math.abs(trade.profit) / peak) * 100;
-      if (trade.profit < 0 && tradeDDPercentage >= 4.0) {
-        isDailyDrawdownCompliant = false;
-      }
-
-      // 2. Check Single-Asset NAV allocation weight (diversification)
-      if (trade.weightPercentage > 40) {
-        isDiversificationCompliant = false;
-      }
-
-      // 3. Check Consistency rule: a single trade's profit should not make up more than 40% of the profit target
-      if (trade.profit > 0 && trade.profit > targetProfit * 0.4) {
-        isConsistencyCompliant = false;
-      }
-
-      // 4. Check Liquidity / VN100 ticker compliant
-      if (!COMPLIANT_TICKERS.includes(trade.ticker.toUpperCase())) {
+      // 1. Check Liquidity / VN100 ticker compliant
+      if (!COMPLIANT_TICKERS.includes(ticker)) {
         isLiquidityCompliant = false;
       }
+      
+      if (trade.action === 'BUY') {
+        if (!buyQueues[ticker]) {
+          buyQueues[ticker] = [];
+        }
+        buyQueues[ticker].push({
+          id: trade.id,
+          price: trade.price,
+          quantity: trade.quantity,
+          weight: trade.weightPercentage,
+          originalQuantity: trade.quantity,
+        });
+        
+        activeWeights[ticker] = (activeWeights[ticker] || 0) + trade.weightPercentage;
+        
+        computedStates[trade.id].isClosed = false;
+        computedStates[trade.id].remainingQty = trade.quantity;
+      } else {
+        // SELL transaction
+        let sellQtyRemaining = trade.quantity;
+        let matchedProfitSum = 0;
+        let weightedEntrySum = 0;
+        let totalMatchedQty = 0;
+        
+        const queue = buyQueues[ticker] || [];
+        while (sellQtyRemaining > 0 && queue.length > 0) {
+          const buy = queue[0];
+          const matchedQty = Math.min(sellQtyRemaining, buy.quantity);
+          const matchedWeight = buy.weight * (matchedQty / buy.quantity);
+          
+          matchedProfitSum += matchedQty * (trade.price - buy.price) * 1000;
+          weightedEntrySum += matchedQty * buy.price;
+          totalMatchedQty += matchedQty;
+          
+          buy.quantity -= matchedQty;
+          buy.weight = Math.max(0, buy.weight - matchedWeight);
+          
+          computedStates[buy.id].remainingQty = buy.quantity;
+          if (buy.quantity === 0) {
+            computedStates[buy.id].isClosed = true;
+            queue.shift();
+          }
+          
+          activeWeights[ticker] = Math.max(0, (activeWeights[ticker] || 0) - matchedWeight);
+          sellQtyRemaining -= matchedQty;
+        }
+        
+        computedStates[trade.id].realizedProfit = matchedProfitSum;
+        computedStates[trade.id].matchedPrice = totalMatchedQty > 0 ? (weightedEntrySum / totalMatchedQty) : undefined;
+        computedStates[trade.id].isClosed = true;
+        computedStates[trade.id].remainingQty = 0;
+        
+        balance += matchedProfitSum;
+        
+        if (balance > peak) {
+          peak = balance;
+        }
+        
+        const currentDD = ((peak - balance) / peak) * 100;
+        if (currentDD > maxDD) {
+          maxDD = currentDD;
+        }
+        
+        if (matchedProfitSum > 0) {
+          winCount++;
+        }
+        
+        // Check Max Daily Drawdown rule
+        const tradeDDPercentage = (Math.abs(matchedProfitSum) / peak) * 100;
+        if (matchedProfitSum < 0 && tradeDDPercentage >= 4.0) {
+          isDailyDrawdownCompliant = false;
+        }
+        
+        // Check Consistency rule
+        if (matchedProfitSum > 0 && matchedProfitSum > targetProfit * 0.4) {
+          isConsistencyCompliant = false;
+        }
+      }
+      
+      // Check diversification weight limit at each transaction state
+      Object.keys(activeWeights).forEach((t) => {
+        if (activeWeights[t] > 40) {
+          isDiversificationCompliant = false;
+        }
+      });
     });
 
     // Overall total drawdown check
@@ -122,16 +238,23 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
       isTotalDrawdownCompliant = false;
     }
 
-    const calculatedWinRate = tradeLogs.length > 0 ? (winCount / tradeLogs.length) * 100 : 0;
+    const sellTrades = tradeLogs.filter(t => t.action === 'SELL');
+    const calculatedWinRate = sellTrades.length > 0 ? (winCount / sellTrades.length) * 100 : 0;
+
+    // Last sell loss for dailyDrawdown display
+    const lastSell = sellTrades[sellTrades.length - 1];
+    const lastSellProfit = lastSell ? (computedStates[lastSell.id]?.realizedProfit || 0) : 0;
 
     setStats({
       initialBalance: initialCapital,
       currentBalance: balance,
       peakBalance: peak,
-      totalTrades: tradeLogs.length,
+      totalTrades: sellTrades.length,
       winRate: calculatedWinRate,
       maxDrawdown: maxDD,
-      dailyDrawdown: tradeLogs.length > 0 && tradeLogs[tradeLogs.length - 1].profit < 0 ? (Math.abs(tradeLogs[tradeLogs.length - 1].profit) / peak) * 100 : 0,
+      dailyDrawdown: lastSellProfit < 0 
+        ? (Math.abs(lastSellProfit) / peak) * 100 
+        : 0,
       isCompliant: {
         maxDailyDrawdown: isDailyDrawdownCompliant,
         maxTotalDrawdown: isTotalDrawdownCompliant,
@@ -140,15 +263,20 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
         liquidity: isLiquidityCompliant,
       }
     });
+
+    setComputedTradeStates(computedStates);
   }, [tradeLogs, initialCapital]);
 
   const handleAddTrade = (e: React.FormEvent) => {
     e.preventDefault();
     if (!ticker) return;
 
-    // Calculate profit
-    const multiplier = action === 'BUY' ? 1 : -1;
-    const profit = quantity * (Number(exitPrice) - Number(entryPrice)) * 1000 * multiplier;
+    const cleaned = String(entryPrice).trim().replace(/,/g, '.');
+    const parsedPrice = parseFloat(cleaned);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      alert('Vui lòng nhập giá giao dịch hợp lệ!');
+      return;
+    }
 
     const newTrade: TradeLog = {
       id: 't_' + Date.now(),
@@ -156,33 +284,95 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
       ticker: ticker.toUpperCase(),
       action,
       quantity,
-      price: Number(entryPrice),
-      profit,
-      drawdownPercentage: profit < 0 ? (Math.abs(profit) / stats.peakBalance) * 100 : 0,
+      price: parsedPrice,
       comment: comment || 'Ghi nhận thủ công từ mô phỏng.',
-      weightPercentage: weight,
+      weightPercentage: action === 'BUY' ? weight : 0,
+      status: action === 'BUY' ? 'OPEN' : 'CLOSED',
     };
 
-    setTradeLogs([...tradeLogs, newTrade]);
+    if (currentUser) {
+      const docRef = doc(db, 'users', currentUser.uid, 'tradeLogs', newTrade.id);
+      setDoc(docRef, newTrade).catch(err => console.error("Error adding trade to firestore:", err));
+    } else {
+      setTradeLogs([...tradeLogs, newTrade]);
+    }
 
     // Reset all inputs to blank
     setTicker('');
     setAction('BUY');
     setQuantity(100);
     setEntryPrice('');
-    setExitPrice('');
     setWeight(20);
     setComment('');
   };
 
+  const handleConfirmCloseTrade = (id: string) => {
+    const cleaned = exitPriceInput.trim().replace(/,/g, '.');
+    const val = parseFloat(cleaned);
+    if (isNaN(val) || val <= 0) {
+      alert('Vui lòng nhập giá exit hợp lệ!');
+      return;
+    }
+
+    const matchedTrade = tradeLogs.find(t => t.id === id);
+    if (!matchedTrade) return;
+
+    const matchedState = computedTradeStates[id];
+    const qtyToClose = matchedState ? matchedState.remainingQty : matchedTrade.quantity;
+
+    if (qtyToClose <= 0) {
+      alert('Vị thế này đã được đóng hoàn toàn!');
+      setClosingTradeId(null);
+      setExitPriceInput('');
+      return;
+    }
+
+    // Create a new BÁN trade log
+    const closeTrade: TradeLog = {
+      id: 't_' + Date.now(),
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      ticker: matchedTrade.ticker.toUpperCase(),
+      action: 'SELL',
+      quantity: qtyToClose,
+      price: val,
+      comment: `Chốt vị thế cho lệnh mua ngày ${matchedTrade.timestamp}.`,
+      weightPercentage: 0,
+      status: 'CLOSED',
+    };
+
+    if (currentUser) {
+      const docRef = doc(db, 'users', currentUser.uid, 'tradeLogs', closeTrade.id);
+      setDoc(docRef, closeTrade).catch(err => console.error("Error closing trade in firestore:", err));
+    } else {
+      setTradeLogs([...tradeLogs, closeTrade]);
+    }
+
+    setClosingTradeId(null);
+    setExitPriceInput('');
+  };
+
   const handleDeleteTrade = (id: string) => {
-    setTradeLogs(tradeLogs.filter(t => t.id !== id));
+    if (currentUser) {
+      const docRef = doc(db, 'users', currentUser.uid, 'tradeLogs', id);
+      deleteDoc(docRef).catch(err => console.error("Error deleting trade in firestore:", err));
+    } else {
+      setTradeLogs(tradeLogs.filter(t => t.id !== id));
+    }
   };
 
   const handleResetTerminal = () => {
     if (window.confirm('Bạn có chắc chắn muốn XÓA TOÀN BỘ nhật ký giao dịch không? Hành động này không thể hoàn tác.')) {
-      setTradeLogs([]);
-      try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      if (currentUser) {
+        const batch = writeBatch(db);
+        tradeLogs.forEach(t => {
+          const docRef = doc(db, 'users', currentUser.uid, 'tradeLogs', t.id);
+          batch.delete(docRef);
+        });
+        batch.commit().catch(err => console.error("Error resetting trades in firestore:", err));
+      } else {
+        setTradeLogs([]);
+        try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      }
     }
   };
 
@@ -192,19 +382,62 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
       alert('Nhật ký giao dịch đang trống, không có dữ liệu để xuất.');
       return;
     }
+    const buyQueues: Record<string, { price: number; quantity: number }[]> = {};
+    const computedRows = tradeLogs.map(t => {
+      const ticker = t.ticker.toUpperCase();
+      let entryPriceStr = '';
+      let exitPriceStr = '';
+      let profit = 0;
+
+      if (t.action === 'BUY') {
+        if (!buyQueues[ticker]) {
+          buyQueues[ticker] = [];
+        }
+        buyQueues[ticker].push({ price: t.price, quantity: t.quantity });
+        entryPriceStr = String(t.price);
+        exitPriceStr = '';
+        profit = 0;
+      } else {
+        exitPriceStr = String(t.price);
+        let sellQtyRemaining = t.quantity;
+        let matchedProfitSum = 0;
+        let weightedEntrySum = 0;
+        let totalMatchedQty = 0;
+        const queue = buyQueues[ticker] || [];
+        
+        while (sellQtyRemaining > 0 && queue.length > 0) {
+          const buy = queue[0];
+          const matchedQty = Math.min(sellQtyRemaining, buy.quantity);
+          matchedProfitSum += matchedQty * (t.price - buy.price) * 1000;
+          weightedEntrySum += matchedQty * buy.price;
+          totalMatchedQty += matchedQty;
+          
+          buy.quantity -= matchedQty;
+          if (buy.quantity === 0) {
+            queue.shift();
+          }
+          sellQtyRemaining -= matchedQty;
+        }
+        
+        entryPriceStr = totalMatchedQty > 0 ? String(weightedEntrySum / totalMatchedQty) : '';
+        profit = matchedProfitSum;
+      }
+
+      return [
+        t.timestamp,
+        t.ticker,
+        t.action === 'BUY' ? 'MUA' : 'BÁN',
+        t.quantity,
+        entryPriceStr,
+        exitPriceStr,
+        profit,
+        t.action === 'BUY' ? t.weightPercentage : '',
+        `"${(t.comment || '').replace(/"/g, '""')}"`
+      ];
+    });
+
     const headers = ['Thời Gian', 'Mã CK', 'Lệnh', 'Khối Lượng', 'Giá Entry (x1000đ)', 'Giá Exit (x1000đ)', 'Lợi Nhuận (đ)', 'Tỷ Trọng (%)', 'Nhận Xét'];
-    const rows = tradeLogs.map(t => [
-      t.timestamp,
-      t.ticker,
-      t.action,
-      t.quantity,
-      t.price,
-      (t as any).exitPrice ?? '',
-      t.profit,
-      t.weightPercentage ?? '',
-      `"${(t.comment || '').replace(/"/g, '""')}"`
-    ]);
-    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const csvContent = [headers.join(','), ...computedRows.map(r => r.join(','))].join('\n');
     const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -214,10 +447,8 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
     URL.revokeObjectURL(url);
   }, [tradeLogs]);
 
-  // Build the coordinates for our custom high-fidelity SVG chart
+  // Build the coordinates for our custom high-fidelity SVG chart (CLOSED positions only)
   const buildSvgPath = (width: number, height: number) => {
-    if (tradeLogs.length === 0) return { path: '', points: [], areaPath: '' };
-
     const padding = 40;
     const chartWidth = width - padding * 2;
     const chartHeight = height - padding * 2;
@@ -225,14 +456,45 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
     // Track cumulative balance progression starting with initialCapital
     const balanceHistory: number[] = [initialCapital];
     let runningBalance = initialCapital;
-    tradeLogs.forEach(trade => {
-      runningBalance += trade.profit;
-      balanceHistory.push(runningBalance);
+
+    // FIFO Queue for matching:
+    const buyQueues: Record<string, { price: number; quantity: number }[]> = {};
+
+    tradeLogs.forEach((trade) => {
+      const ticker = trade.ticker.toUpperCase();
+      if (trade.action === 'BUY') {
+        if (!buyQueues[ticker]) {
+          buyQueues[ticker] = [];
+        }
+        buyQueues[ticker].push({ price: trade.price, quantity: trade.quantity });
+      } else {
+        let sellQtyRemaining = trade.quantity;
+        let matchedProfitSum = 0;
+        const queue = buyQueues[ticker] || [];
+        
+        while (sellQtyRemaining > 0 && queue.length > 0) {
+          const buy = queue[0];
+          const matchedQty = Math.min(sellQtyRemaining, buy.quantity);
+          matchedProfitSum += matchedQty * (trade.price - buy.price) * 1000;
+          buy.quantity -= matchedQty;
+          if (buy.quantity === 0) {
+            queue.shift();
+          }
+          sellQtyRemaining -= matchedQty;
+        }
+        
+        runningBalance += matchedProfitSum;
+        balanceHistory.push(runningBalance);
+      }
     });
+
+    if (balanceHistory.length === 1) {
+      balanceHistory.push(initialCapital);
+    }
 
     const minVal = Math.min(...balanceHistory) * 0.98;
     const maxVal = Math.max(...balanceHistory) * 1.02;
-    const valRange = maxVal - minVal;
+    const valRange = maxVal - minVal || 1;
 
     const points = balanceHistory.map((val, idx) => {
       const x = padding + (idx / (balanceHistory.length - 1)) * chartWidth;
@@ -292,12 +554,33 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
 
         <button
           onClick={handleResetTerminal}
-          className="flex items-center space-x-2 px-3.5 py-2 bg-brand-surface border border-brand-surface-bright hover:border-brand-red text-xs font-bold font-display text-brand-gray-light hover:text-brand-red rounded transition-all"
+          className="flex items-center space-x-2 px-3.5 py-2 bg-brand-surface border border-brand-surface-bright hover:border-brand-red text-xs font-bold font-display text-brand-gray-light hover:text-brand-red rounded transition-all cursor-pointer"
         >
           <RotateCcw className="w-4 h-4" />
           <span>LÀM MỚI TOÀN BỘ</span>
         </button>
       </div>
+
+      {/* Auth Banner CTA */}
+      {!currentUser && (
+        <div className="bg-brand-surface-bright/20 border border-brand-mint/30 rounded p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-[0_0_20px_rgba(0,225,161,0.05)]">
+          <div className="space-y-1">
+            <div className="text-xs font-bold font-display text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 bg-brand-mint rounded-full animate-ping animate-duration-1000" />
+              <span>Chế độ Khách (Lưu tạm thời)</span>
+            </div>
+            <p className="text-[11px] text-brand-gray leading-relaxed font-sans max-w-2xl">
+              Nhật ký giao dịch của bạn hiện đang được lưu tạm trên trình duyệt này. Hãy **Đăng ký** hoặc **Đăng nhập** tài khoản để kích hoạt lưu trữ đám mây, bảo vệ nhật ký và theo dõi hiệu suất thực chiến lâu dài của bạn.
+            </p>
+          </div>
+          <button
+            onClick={onTriggerLogin}
+            className="flex-shrink-0 px-4 py-2 bg-brand-mint text-brand-bg hover:bg-white font-display text-xs font-black tracking-wider rounded transition-all uppercase cursor-pointer"
+          >
+            Đăng nhập ngay
+          </button>
+        </div>
+      )}
 
       {/* Starting capital selection */}
       <div className="bg-brand-container border border-brand-surface-bright p-5 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
@@ -309,17 +592,20 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
         </div>
 
         <div className="md:col-span-2 flex flex-wrap gap-3">
-          {[10000000, 30000000].map((cap) => (
+          {['vong1', 'vong2'].map((round) => (
             <button
-              key={cap}
-              onClick={() => setInitialCapital(cap)}
+              key={round}
+              onClick={() => {
+                setActiveRound(round as 'vong1' | 'vong2');
+                setInitialCapital(10000000);
+              }}
               className={`px-4 py-2.5 rounded font-mono text-xs font-bold tracking-wider border transition-all ${
-                initialCapital === cap
+                activeRound === round
                   ? 'bg-brand-mint text-brand-bg border-brand-mint shadow-[0_0_15px_rgba(0,225,161,0.25)]'
                   : 'bg-brand-surface border-brand-surface-bright text-brand-gray-light hover:text-white hover:border-brand-gray'
               }`}
             >
-              {cap === 10000000 ? '10M VND (Vòng 2)' : '30M VND (Vòng 1)'}
+              {round === 'vong1' ? '10M VND (Vòng 1)' : '10M VND (Vòng 2)'}
             </button>
           ))}
         </div>
@@ -484,12 +770,12 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                             {formatCurrency(svgData.points[hoveredTradeIdx].value)}
                           </span>
                         </div>
-                        {hoveredTradeIdx > 0 && (
+                        {hoveredTradeIdx > 0 && closedTrades[hoveredTradeIdx - 1] && (
                           <div className="flex justify-between space-x-6 font-mono border-t border-brand-surface-bright/50 pt-1 mt-1">
                             <span className="text-brand-gray font-bold uppercase">Giao dịch gần nhất:</span>
-                            <span className={tradeLogs[hoveredTradeIdx - 1].profit >= 0 ? 'text-brand-mint' : 'text-brand-red'}>
-                              {tradeLogs[hoveredTradeIdx - 1].profit >= 0 ? '+' : ''}
-                              {formatCurrency(tradeLogs[hoveredTradeIdx - 1].profit)} ({tradeLogs[hoveredTradeIdx - 1].ticker})
+                            <span className={closedTrades[hoveredTradeIdx - 1].profit >= 0 ? 'text-brand-mint' : 'text-brand-red'}>
+                              {closedTrades[hoveredTradeIdx - 1].profit >= 0 ? '+' : ''}
+                              {formatCurrency(closedTrades[hoveredTradeIdx - 1].profit)} ({closedTrades[hoveredTradeIdx - 1].ticker})
                             </span>
                           </div>
                         )}
@@ -692,7 +978,7 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                 <input
                   type="number"
                   required
-                  min={10}
+                  min={1}
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
                   className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
@@ -703,46 +989,43 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                 <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
                   Tỷ Trọng Mua / NAV (%)
                 </label>
-                <input
-                  type="number"
-                  required
-                  min={1}
-                  max={100}
-                  value={weight}
-                  onChange={(e) => setWeight(Math.min(100, Math.max(1, Number(e.target.value))))}
-                  className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
-                />
+                {action === 'BUY' ? (
+                  <input
+                    type="number"
+                    required
+                    min={1}
+                    max={100}
+                    value={weight}
+                    onChange={(e) => setWeight(Math.min(100, Math.max(1, Number(e.target.value))))}
+                    className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    disabled
+                    value="Không áp dụng"
+                    className="w-full px-3 py-2 bg-brand-surface/40 border border-brand-surface-bright/50 rounded text-xs text-brand-gray cursor-not-allowed focus:outline-none font-sans"
+                  />
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
-                  Giá Mua Vào (x1.000 đ) *
-                </label>
-                <input
-                  type="number"
-                  required
-                  step="any"
-                  value={entryPrice}
-                  onChange={(e) => setEntryPrice(e.target.value)}
-                  className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
-                  Giá Bán Ra (x1.000 đ) *
-                </label>
-                <input
-                  type="number"
-                  required
-                  step="any"
-                  value={exitPrice}
-                  onChange={(e) => setExitPrice(e.target.value)}
-                  className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint"
-                />
-              </div>
+            <div>
+              <label className="block text-[10px] uppercase font-bold text-brand-gray tracking-wider font-display mb-1.5">
+                {action === 'BUY' ? 'Giá Entry (x1.000 đ) *' : 'Giá Exit (x1.000 đ) *'}
+              </label>
+              <input
+                type="text"
+                inputMode="decimal"
+                required
+                placeholder={action === 'BUY' ? 'Ví dụ: 28.5' : 'Ví dụ: 30.0'}
+                value={entryPrice}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/,/g, '.');
+                  setEntryPrice(cleaned);
+                }}
+                className="w-full px-3 py-2 bg-brand-surface border border-brand-surface-bright rounded text-xs text-white focus:outline-none focus:border-brand-mint font-mono"
+              />
             </div>
 
             <div>
@@ -821,38 +1104,148 @@ export default function DashboardSection({ brand }: { brand: BrandConfig }) {
                     </td>
                   </tr>
                 ) : (
-                  [...tradeLogs].reverse().map((trade) => (
-                    <tr key={trade.id} className="hover:bg-brand-surface/20 transition-colors">
-                      <td className="py-3 text-[10px] text-brand-gray font-mono">{trade.timestamp}</td>
-                      <td className="py-3 font-bold text-white uppercase">{trade.ticker}</td>
-                      <td className="py-3 text-center">
-                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider ${
-                          trade.action === 'BUY' ? 'bg-brand-mint-bg text-brand-mint border border-brand-mint/10' : 'bg-brand-red-bg text-brand-red border border-brand-red/10'
+                  [...tradeLogs].reverse().map((trade) => {
+                    const computedState = computedTradeStates[trade.id];
+                    const isClosed = computedState ? computedState.isClosed : (trade.action === 'SELL');
+                    const entryPriceToRender = trade.action === 'BUY'
+                      ? trade.price
+                      : (computedState?.matchedPrice !== undefined ? computedState.matchedPrice : undefined);
+                    const exitPriceToRender = trade.action === 'SELL'
+                      ? trade.price
+                      : undefined;
+                    const profitToRender = trade.action === 'SELL'
+                      ? (computedState?.realizedProfit || 0)
+                      : 0;
+
+                    return (
+                      <tr key={trade.id} className="hover:bg-brand-surface/20 transition-colors">
+                        <td className="py-3 text-[10px] text-brand-gray font-mono">{trade.timestamp}</td>
+                        <td className="py-3 font-bold text-white uppercase">
+                          <div className="flex items-center space-x-1.5">
+                            <span>{trade.ticker}</span>
+                            {trade.action === 'BUY' && !isClosed ? (
+                              <span className="flex h-2 w-2 relative">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-mint opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-mint" title="Đang mở (HOLDING)"></span>
+                              </span>
+                            ) : null}
+                          </div>
+                        </td>
+                        <td className="py-3 text-center">
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-black tracking-wider ${
+                            trade.action === 'BUY' ? 'bg-brand-mint-bg text-brand-mint border border-brand-mint/10' : 'bg-brand-red-bg text-brand-red border border-brand-red/10'
+                          }`}>
+                            {trade.action === 'BUY' ? 'MUA' : 'BÁN'}
+                          </span>
+                        </td>
+                        <td className="py-3 text-right font-mono font-medium text-white">
+                          {trade.quantity.toLocaleString('vi-VN')}
+                          {trade.action === 'BUY' && computedState && computedState.remainingQty < trade.quantity && computedState.remainingQty > 0 && (
+                            <span className="text-[9px] text-brand-mint block font-sans font-light">
+                              (còn {computedState.remainingQty.toLocaleString('vi-VN')})
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 text-right font-mono text-brand-gray-light">
+                          {entryPriceToRender !== undefined
+                            ? entryPriceToRender.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })
+                            : '-'
+                          }
+                        </td>
+                        <td className="py-3 text-right font-mono text-brand-gray-light">
+                          {trade.action === 'BUY' ? (
+                            !isClosed ? (
+                              closingTradeId === trade.id ? (
+                                <div className="flex items-center space-x-1 justify-end">
+                                  <input
+                                    type="text"
+                                    inputMode="decimal"
+                                    required
+                                    placeholder="Giá exit"
+                                    value={exitPriceInput}
+                                    onChange={(e) => setExitPriceInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        handleConfirmCloseTrade(trade.id);
+                                      } else if (e.key === 'Escape') {
+                                        setClosingTradeId(null);
+                                        setExitPriceInput('');
+                                      }
+                                    }}
+                                    className="w-16 px-1.5 py-1 bg-brand-surface border border-brand-mint rounded text-[11px] text-white font-mono text-right focus:outline-none"
+                                    autoFocus
+                                  />
+                                  <button
+                                    onClick={() => handleConfirmCloseTrade(trade.id)}
+                                    className="p-1 text-brand-mint hover:text-white hover:bg-brand-mint/20 rounded font-sans font-bold"
+                                    title="Xác nhận"
+                                  >
+                                    ✓
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setClosingTradeId(null);
+                                      setExitPriceInput('');
+                                    }}
+                                    className="p-1 text-brand-red hover:text-white hover:bg-brand-red/20 rounded font-sans font-bold"
+                                    title="Hủy"
+                                  >
+                                    ✗
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setClosingTradeId(trade.id);
+                                    setExitPriceInput('');
+                                  }}
+                                  className="px-2 py-0.5 bg-brand-mint/10 border border-brand-mint/30 hover:bg-brand-mint hover:text-brand-bg rounded text-[9px] font-bold text-brand-mint transition-all uppercase tracking-wider font-display"
+                                >
+                                  CHỐT
+                                </button>
+                              )
+                            ) : (
+                              '-'
+                            )
+                          ) : (
+                            exitPriceToRender !== undefined
+                              ? exitPriceToRender.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })
+                              : '-'
+                          )}
+                        </td>
+                        <td className={`py-3 text-right font-mono font-bold ${
+                          trade.action === 'BUY'
+                            ? 'text-brand-gray'
+                            : profitToRender >= 0 ? 'text-brand-mint' : 'text-brand-red'
                         }`}>
-                          {trade.action}
-                        </span>
-                      </td>
-                      <td className="py-3 text-right font-mono font-medium">{trade.quantity.toLocaleString('vi-VN')}</td>
-                      <td className="py-3 text-right font-mono text-brand-gray-light">{trade.price.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })}</td>
-                      <td className="py-3 text-right font-mono text-brand-gray-light">
-                        {trade.price === 0 ? '-' : (trade.price + (trade.profit / (trade.quantity * 1000)) * (trade.action === 'BUY' ? 1 : -1)).toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 3 })}
-                      </td>
-                      <td className={`py-3 text-right font-mono font-bold ${trade.profit >= 0 ? 'text-brand-mint' : 'text-brand-red'}`}>
-                        {trade.profit >= 0 ? '+' : ''}
-                        {trade.profit.toLocaleString('vi-VN')}
-                      </td>
-                      <td className="py-3 text-right font-mono text-brand-gray">{trade.weightPercentage}%</td>
-                      <td className="py-3 text-center">
-                        <button
-                          onClick={() => handleDeleteTrade(trade.id)}
-                          className="text-brand-gray hover:text-brand-red p-1 rounded transition-colors"
-                          title="Xóa dòng nhật ký"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                          {trade.action === 'BUY' ? (
+                            !isClosed ? (
+                              <span className="text-[10px] italic">Đang mở</span>
+                            ) : (
+                              '-'
+                            )
+                          ) : (
+                            <>
+                              {profitToRender >= 0 ? '+' : ''}
+                              {profitToRender.toLocaleString('vi-VN')}
+                            </>
+                          )}
+                        </td>
+                        <td className="py-3 text-right font-mono text-brand-gray">
+                          {trade.action === 'BUY' ? `${trade.weightPercentage}%` : '-'}
+                        </td>
+                        <td className="py-3 text-center">
+                          <button
+                            onClick={() => handleDeleteTrade(trade.id)}
+                            className="text-brand-gray hover:text-brand-red p-1 rounded transition-colors"
+                            title="Xóa dòng nhật ký"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

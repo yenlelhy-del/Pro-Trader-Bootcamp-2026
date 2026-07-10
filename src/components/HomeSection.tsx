@@ -9,7 +9,7 @@ import qrQuangImg from '../assets/images/kbsv_nguyen_minh_quang.png';
 import { BrandConfig } from '../brandConfig';
 
 interface HomeSectionProps {
-  onRegisterSuccess: (name: string, phone: string, brokerCode: string) => void;
+  onRegisterSuccess: (name: string, phone: string, brokerCode: string, email: string) => void;
   setActiveTab: (tab: string) => void;
   brand: BrandConfig;
 }
@@ -22,6 +22,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [brokerCode, setBrokerCode] = useState('');
+  const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedName, setSubmittedName] = useState('');
 
@@ -233,11 +234,11 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
 
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phoneNumber) return;
+    if (!fullName || !phoneNumber || !email) return;
 
     setIsSubmitted(true);
     setSubmittedName(fullName);
-    onRegisterSuccess(fullName, phoneNumber, brokerCode);
+    onRegisterSuccess(fullName, phoneNumber, brokerCode, email);
   };
 
   const handleToolRequestSubmit = (e: React.FormEvent) => {
@@ -487,7 +488,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 KỶ LUẬT LÀ SỨC MẠNH
               </h3>
               <p className="text-brand-gray-light text-xs sm:text-sm leading-relaxed font-sans">
-                Giới hạn sụt giảm <span className="text-brand-mint font-bold">Max Drawdown &lt; 7%</span> để bảo vệ vốn tuyệt đối. Mọi vi phạm quy tắc quản trị rủi ro sẽ buộc dừng cuộc chơi ngay lập tức nhằm rèn luyện tư duy kỷ luật thép.
+                Giới hạn sụt giảm <span className="text-brand-mint font-bold">Max Drawdown &lt; 8%</span> để bảo vệ vốn tuyệt đối. Mọi vi phạm quy tắc quản trị rủi ro sẽ buộc dừng cuộc chơi ngay lập tức nhằm rèn luyện tư duy kỷ luật thép.
               </p>
             </div>
 
@@ -568,7 +569,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
             <div className="grid grid-cols-2 gap-4 bg-brand-surface/80 p-4 rounded border border-brand-surface-bright/40 font-display">
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">NAV tối thiểu</span>
-                <span className="text-base sm:text-lg font-black text-white">30 triệu VND</span>
+                <span className="text-base sm:text-lg font-black text-white">10 triệu VND</span>
                 <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Nạp vào tài khoản CTCK chỉ định</span>
               </div>
               <div>
@@ -697,13 +698,13 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
             <div className="grid grid-cols-2 gap-4 bg-brand-surface/80 p-4 rounded border border-brand-surface-bright/40 font-display">
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">Hạn mức</span>
-                <span className="text-base sm:text-lg font-black text-brand-mint">x10 lần vốn</span>
+                <span className="text-base sm:text-lg font-black text-brand-mint">100 triệu</span>
                 <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Được cấp vốn ủy thác từ học viện</span>
               </div>
               <div>
                 <span className="text-[10px] text-brand-gray uppercase font-bold tracking-wider block">Chia thưởng</span>
-                <span className="text-base sm:text-lg font-black text-brand-gold">80% Lợi nhuận</span>
-                <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Dành cho Top 10 performance, review 2 tháng/lần</span>
+                <span className="text-base sm:text-lg font-black text-brand-gold">80% Lãi</span>
+                <span className="text-[10px] text-brand-gray block font-sans font-light leading-snug mt-0.5">Đánh giá 2 tháng/lần</span>
               </div>
             </div>
 
@@ -886,11 +887,11 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                   </li>
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">8% NAV</strong> (tương đương <strong className="text-brand-red font-medium">800.000 đ</strong>).</span>
+                    <span>Giới hạn sụt giảm tài khoản bảo vệ vốn luôn giữ ở mức <strong className="text-white font-medium">8% NAV</strong>.</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-brand-mint mr-2">•</span>
-                    <span>Chia thưởng tới <strong className="text-white font-medium">80% lợi nhuận</strong> cho Top 10 Best Performance, review định kỳ 2 tháng một lần.</span>
+                    <span>Chia thưởng tới <strong className="text-white font-medium">80% lợi nhuận</strong>, review định kỳ 2 tháng một lần.</span>
                   </li>
                 </ul>
               </div>
@@ -941,7 +942,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                     Giới hạn sụt giảm tối đa (8%):
                   </span>
                   <div className="text-lg sm:text-xl font-mono font-black text-brand-red mt-1.5">
-                    800.000 đ
+                    8% NAV
                   </div>
                   <span className="text-[10px] text-brand-gray mt-1 block">
                     Bộ đệm rủi ro an toàn tuyệt đối
@@ -957,7 +958,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                     80% / 20%
                   </div>
                   <span className="text-[10px] text-brand-mint font-display font-medium mt-1 block text-left">
-                    Dành cho Top 10 performance, review 2 tháng/lần
+                    Review định kỳ 2 tháng một lần
                   </span>
                 </div>
 
@@ -1138,7 +1139,7 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
               <div className="space-y-1">
                 <h4 className="font-display font-bold text-sm text-white uppercase">Bắt đầu thử thách thăng hạng</h4>
                 <p className="text-brand-gray text-xs sm:text-sm font-sans leading-relaxed">
-                  Nạp tối thiểu 30 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
+                  Nạp tối thiểu 10 triệu VND vào tài khoản cá nhân chứng khoán tự quản và tranh tài kỷ luật cùng cộng đồng.
                 </p>
               </div>
             </div>
@@ -1175,7 +1176,9 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                 Đăng Ký Thành Công!
               </h4>
               <p className="text-brand-gray-light text-xs sm:text-sm font-sans max-w-sm mx-auto leading-relaxed">
-                Xin chào <strong className="text-white">{submittedName}</strong>, chúng tôi đã ghi nhận đăng ký thử thách của bạn. Chuyên viên tư vấn sẽ liên hệ qua số điện thoại <strong className="text-white">{phoneNumber}</strong> (Zalo) của bạn sau ít phút.
+                Xin chào <strong className="text-white">{submittedName}</strong>, chúng tôi đã ghi nhận đăng ký thử thách của bạn.
+                <br /><br />
+                Một **đường dẫn xác nhận đăng nhập (Magic Link)** đã được gửi tới email <strong className="text-white">{email}</strong>. Vui lòng kiểm tra hộp thư của bạn (bao gồm cả thư rác/spam) và click vào link để xác minh tài khoản, kích hoạt chế độ lưu trữ nhật ký giao dịch vĩnh viễn!
               </p>
               <button
                 onClick={() => {
@@ -1183,8 +1186,9 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                   setFullName('');
                   setPhoneNumber('');
                   setBrokerCode('');
+                  setEmail('');
                 }}
-                className="px-4 py-2 bg-brand-surface-bright text-white hover:bg-brand-surface border border-brand-surface-bright rounded text-xs font-bold font-display"
+                className="px-4 py-2 bg-brand-surface-bright text-white hover:bg-brand-surface border border-brand-surface-bright rounded text-xs font-bold font-display cursor-pointer"
               >
                 ĐĂNG KÝ MỚI
               </button>
@@ -1216,6 +1220,20 @@ export default function HomeSection({ onRegisterSuccess, setActiveTab, brand }: 
                   placeholder="0901 234 567"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="w-full px-4 py-3 bg-brand-surface border border-brand-surface-bright rounded text-sm text-white focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-mint transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-[10px] uppercase font-bold text-brand-gray-light tracking-widest font-display">
+                  Email Xác Nhận *
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 bg-brand-surface border border-brand-surface-bright rounded text-sm text-white focus:outline-none focus:border-brand-mint focus:ring-1 focus:ring-brand-mint transition-all"
                 />
               </div>
